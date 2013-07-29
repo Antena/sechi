@@ -1,5 +1,56 @@
-<form>
+<form class="form-horizontal">
     <fieldset>
-        <legend>Indentificación de la organización</legend>
+        <legend>Indentificación de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
+        <div class="form-group">
+            <label for="inputName" class="col-lg-2 control-label">Nombre oficial</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputName" placeholder="Nombre oficial">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputFantasyName" class="col-lg-2 control-label">Nombre de fantasía</label>
+            <div class="col-lg-10">
+                <input type="password" class="form-control" id="inputFantasyName" placeholder="Nombre de fantasía">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputTelephone" class="col-lg-2 control-label">Teléfono</label>
+            <div class="col-lg-5">
+                <input type="password" class="form-control" id="inputTelephone" placeholder="Teléfono">
+            </div>
+            <div class="col-lg-5">
+                <input type="password" class="form-control" id="inputOtherTelephone" placeholder="Otro teléfono">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail" class="col-lg-2 control-label">Mail</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputEmail" placeholder="Mail">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputWebsite" class="col-lg-2 control-label">Website</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputWebsite" placeholder="Website">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputOpeningHours" class="col-lg-2 control-label">Horario de atención</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputOpeningHours" placeholder="Horario de atención">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputContact" class="col-lg-2 control-label">Contacto/Referente</label>
+            <div class="col-lg-6">
+                <input type="password" class="form-control" id="inputContact" placeholder="Nombre">
+            </div>
+            <div class="col-lg-2">
+                <input type="password" class="form-control" id="inputOtherContactTelephone" placeholder="Teléfono">
+            </div>
+            <div class="col-lg-2">
+                <input type="password" class="form-control" id="inputOtherContactTitle" placeholder="Cargo">
+            </div>
+        </div>
     </fieldset>
 </form>
