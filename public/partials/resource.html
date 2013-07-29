@@ -1,3 +1,26 @@
 <div class="container">
-    <h1>Recurso</h1>
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-pills">
+                <li ng-class="{active: currentStep == step.step, disabled: !step.completed && $index > currentStep}" ng-repeat="step in steps">
+                    <a href="#" ng-click="goto($index)" prevent-click><span class="label" ng-class="{'label-success': step.completed, 'label-warning': $index == currentStep}">{{ $index + 1 }}</span> {{ step.title }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 status">
+            <p class="pull-left step">Paso 1 de 5</p>
+            <div class="progress progress-striped active">
+                <div class="progress-bar" style="width: {{ completed / steps.length * 100 }}%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-repeat="step in steps" ng-show="currentStep == step.step">
+        <ng-include src="step.template"></ng-include>
+        <button type="button" class="btn btn-default" ng-click="prev()" ng-show="!$first">Anterior</button>
+        <button type="button" class="btn btn-primary" ng-click="next(step)" ng-hide="$last">Siguiente</button>
+        <button type="button" class="btn btn-success" ng-click="finish()" ng-show="$last">Finalizar</button>
+    </div>
 </div>
