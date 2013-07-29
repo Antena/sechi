@@ -18,11 +18,11 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', func
     $scope.editing = true;
 
     $scope.steps = [
-        { step: 0, title: "Indentificación de la organización", template:"partials/form/step1.html", completed: false },
-        { step: 1, title: "Dirección", template:"partials/form/step2.html", completed: false },
-        { step: 2, title: "Tipo de organización", template:"partials/form/step3.html", completed: false },
-        { step: 3, title: "Actividades de la organización", template:"partials/form/step4.html", completed: false },
-        { step: 4, title: "Información adicional", template:"partials/form/step5.html", completed: false }
+        { step: 0, title: "Indentificación de la organización", template:"assets/partials/form/step1.html", completed: false },
+        { step: 1, title: "Dirección", template:"assets/partials/form/step2.html", completed: false },
+        { step: 2, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false },
+        { step: 3, title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false },
+        { step: 4, title: "Información adicional", template:"assets/partials/form/step5.html", completed: false }
     ];
 
     $scope.currentStep = 0;
