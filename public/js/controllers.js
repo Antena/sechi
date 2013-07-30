@@ -64,10 +64,33 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 zoom: 11,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-            var map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
+            $scope.map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
         }
         $scope.mapLoaded = true;
     }
 
     $scope.organizationTypes = OrganizationType;
+
+    $scope.geocoder = new google.maps.Geocoder();
+    $scope.geocode = function() {
+        var address = $scope.resource.address.street + " " + $scope.resource.address.number + " Ciudad De Buenos Aires, Buenos Aires Province, Argentina";
+        console.log("Geocoding '" + address + "'...");        //TODO(gb): Remove trace!!!
+
+        $scope.geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var location = results[0].geometry.location;
+                $scope.resource.address.lat = location.jb;
+                $scope.resource.address.lng = location.kb;
+                $scope.map.setCenter(location);
+                $scope.map.setZoom(15);
+                new google.maps.Marker({
+                    map: $scope.map,
+                    position: location
+                });
+                $scope.$apply();
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
 }])
