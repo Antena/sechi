@@ -9,7 +9,7 @@ import org.jongo.marshall.jackson.oid.Id;
 
 import uk.co.panaxiom.playjongo.PlayJongo;
 
-public class Resource extends JongoModel {
+public class Resource {
 
 	@org.jongo.marshall.jackson.oid.ObjectId
 	@Id

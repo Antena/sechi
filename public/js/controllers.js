@@ -13,7 +13,7 @@ controllers.controller('ResourceController', ['$scope', '$rootScope', function($
     $rootScope.page = 'resource';
 }])
 
-controllers.controller('ResourceDetailController', ['$scope', '$rootScope', function($scope, $rootScope) {
+controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'OrganizationType', function($scope, $rootScope, OrganizationType) {
     $rootScope.page = 'resource';
     $scope.editing = true;
 
@@ -67,4 +67,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', func
         }
         $scope.mapLoaded = true;
     }
+
+    $scope.organizationTypes = OrganizationType;
 }])
