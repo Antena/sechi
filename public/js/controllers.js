@@ -101,7 +101,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     $scope.geocoder = new google.maps.Geocoder();
     $scope.geocode = function() {
         var address = $scope.resource.address.street + " " + $scope.resource.address.number + " Ciudad De Buenos Aires, Buenos Aires Province, Argentina";
-        console.log("Geocoding '" + address + "'...");        //TODO(gb): Remove trace!!!
+        console.log("Geocoding '" + address + "'...");
 
         $scope.geocoder.geocode( { 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
@@ -109,7 +109,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 $scope.resource.address.lat = location.lat();
                 $scope.resource.address.lng = location.lng();
                 $scope.map.setCenter(location);
-                $scope.map.setZoom(15)
                 if (!$scope.marker) {
                     $scope.marker = new google.maps.Marker({
                         map: $scope.map,
@@ -133,5 +132,31 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 alert('Geocode was not successful for the following reason: ' + status);
             }
         });
+    }
+
+    $scope.addMarker = function() {
+        var location = new google.maps.LatLng($scope.resource.address.lat, $scope.resource.address.lng);
+        if (!$scope.marker) {
+            $scope.resource.address.lat = location.lat();
+            $scope.resource.address.lng = location.lng();
+
+            $scope.marker = new google.maps.Marker({
+                map: $scope.map,
+                position: location,
+                draggable: true
+            });
+            google.maps.event.addListener(
+                $scope.marker,
+                'drag',
+                function() {
+                    $scope.resource.address.lat = $scope.marker.position.lat();
+                    $scope.resource.address.lng = $scope.marker.position.lng();
+                    $scope.$apply();
+                }
+            );
+        } else {
+            $scope.marker.setPosition(location);
+        }
+        $scope.map.setCenter(location);
     }
 }])
