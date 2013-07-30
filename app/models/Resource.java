@@ -4,48 +4,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.JsonNode;
 import org.jongo.MongoCollection;
 import org.jongo.marshall.jackson.oid.Id;
 
 import uk.co.panaxiom.playjongo.PlayJongo;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 public class Resource extends JongoModel {
 
 	@org.jongo.marshall.jackson.oid.ObjectId
 	@Id
 	private String id;
-	
+
 	public String name;
 
 	public static MongoCollection resources() {
 		return PlayJongo.getCollection("resources");
 	}
 
-	public static List<Resource> getResources() {
-		List<Resource> resp = new ArrayList<Resource>();
-		Iterable<Resource> resources = resources().find().as(Resource.class);
-		for (Resource r : resources) {
-			resp.add(r);
+	public static List<DBObject> getResources() {
+		List<DBObject> objects = new ArrayList<DBObject>();
+		DBCursor find = resources().getDBCollection().find();
+
+		while (find.hasNext()) {
+			DBObject next = find.next();
+			objects.add(next);
 		}
 
-		return resp;
+		return objects;
 	}
 
-	public static Resource findById(String id) {
-		return resources().findOne(new ObjectId(id)).as(Resource.class);
+	public static DBObject findById(String id) {
+		return resources().getDBCollection().findOne(new ObjectId(id));
 	}
 
-	public static void update(Resource resource) {
-		resources().save(resource);
+	public static void update(JsonNode postData) {
+		BasicDBObject query = new BasicDBObject("_id", postData.get("id"));
+		Object parse = com.mongodb.util.JSON.parse(postData.toString());
+		resources().getDBCollection().update(query, (DBObject) parse);
 	}
-	
 
 	public static void remove(String id) {
 		resources().remove(new ObjectId(id));
-	}
-
-	public void save() {
-		resources().save(this);
 	}
 
 	public String getId() {
@@ -54,5 +58,10 @@ public class Resource extends JongoModel {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public static void save(JsonNode postData) {
+		Object parse = com.mongodb.util.JSON.parse(postData.toString());
+		resources().getDBCollection().save((DBObject) parse);
 	}
 }

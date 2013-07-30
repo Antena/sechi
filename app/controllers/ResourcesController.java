@@ -5,10 +5,14 @@ import java.util.List;
 import models.Resource;
 
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
 
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import com.mongodb.DBObject;
 
 /**
  * Created with IntelliJ IDEA. User: dnul Date: 7/29/13 Time: 8:39 PM To change
@@ -17,32 +21,36 @@ import play.mvc.Result;
 public class ResourcesController extends Controller {
 
 	public static Result list() {
-		List<Resource> resources = Resource.getResources();
-		JsonNode json = Json.toJson(resources);
-		return ok(json);
+		ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
+		List<DBObject> resources = Resource.getResources();
+
+		for (DBObject obj : resources) {
+			JsonNode resource = Json.parse(obj.toString());
+			array.add(resource);
+		}
+
+		return ok(array);
 	}
 
 	public static Result get(String id) {
-		Resource resource = Resource.findById(id);
+		DBObject resource = Resource.findById(id);
 		if (resource == null) {
 			return notFound();
 		}
 
-		JsonNode json = Json.toJson(resource);
+		JsonNode json = Json.parse(resource.toString());
 		return ok(json);
 	}
 
 	public static Result insert() {
 		JsonNode postData = request().body().asJson();
-		Resource resource = Json.fromJson(postData, Resource.class);
-		resource.save();
+		Resource.save(postData);
 		return ok();
 	}
 
 	public static Result update() {
 		JsonNode postData = request().body().asJson();
-		Resource resource = Json.fromJson(postData, Resource.class);
-		Resource.update(resource);
+		Resource.update(postData);
 		return ok();
 	}
 
