@@ -2,7 +2,7 @@
     <fieldset>
         <legend>Tipo de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
         <div class="col-lg-6">
-            <h4>Estatal</h4>
+            <h4>{{ 'Estatal' | uppercase }}</h4>
             <div class="checkbox col-lg-6" ng-repeat="type in organizationTypes.State" style="margin-top: -5px;">
                 <label>
                     <input type="checkbox" value=""ng-model="type.checked">
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <h4>No Estatal</h4>
+            <h4>{{ 'No Estatal' | uppercase }}</h4>
             <div class="checkbox col-lg-6" ng-repeat="type in organizationTypes.NonState" style="margin-top: -5px;">
                 <label>
                     <input type="checkbox" value="">

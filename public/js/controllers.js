@@ -16,7 +16,9 @@ controllers.controller('ResourceController', ['$scope', '$rootScope', function($
 controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'OrganizationType', function($scope, $rootScope, OrganizationType) {
     $rootScope.page = 'resource';
     $scope.editing = true;
-    $scope.resource = {};
+    $scope.resource = {
+        address: {lat: null, lng: null}
+    };
 
     $scope.steps = [
 
@@ -65,6 +67,31 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             $scope.map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
+            google.maps.event.addListener($scope.map, 'click', function(event) {
+                if (!$scope.marker) {
+                    $scope.marker = new google.maps.Marker({
+                        position: event.latLng,
+                        map: $scope.map,
+                        draggable: true
+                    })
+                    $scope.resource.address.lat = event.latLng.lat();
+                    $scope.resource.address.lng = event.latLng.lng();
+                    google.maps.event.addListener(
+                        $scope.marker,
+                        'drag',
+                        function() {
+                            $scope.resource.address.lat = $scope.marker.position.lat();
+                            $scope.resource.address.lng = $scope.marker.position.lng();
+                            $scope.$apply();
+                        }
+                    );
+                } else {
+                    $scope.marker.setPosition(event.latLng);
+                    $scope.resource.address.lat = event.latLng.lat();
+                    $scope.resource.address.lng = event.latLng.lng();
+                }
+                $scope.$apply();
+            });
         }
         $scope.mapLoaded = true;
     }
@@ -82,21 +109,25 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 $scope.resource.address.lat = location.lat();
                 $scope.resource.address.lng = location.lng();
                 $scope.map.setCenter(location);
-                $scope.map.setZoom(15);
-                var marker = new google.maps.Marker({
-                    map: $scope.map,
-                    position: location,
-                    draggable: true
-                });
-                google.maps.event.addListener(
-                    marker,
-                    'drag',
-                    function() {
-                        $scope.resource.address.lat = marker.position.lat();
-                        $scope.resource.address.lng = marker.position.lng();
-                        $scope.$apply();
-                    }
-                );
+                $scope.map.setZoom(15)
+                if (!$scope.marker) {
+                    $scope.marker = new google.maps.Marker({
+                        map: $scope.map,
+                        position: location,
+                        draggable: true
+                    });
+                    google.maps.event.addListener(
+                        $scope.marker,
+                        'drag',
+                        function() {
+                            $scope.resource.address.lat = $scope.marker.position.lat();
+                            $scope.resource.address.lng = $scope.marker.position.lng();
+                            $scope.$apply();
+                        }
+                    );
+                } else {
+                    $scope.marker.setPosition(location);
+                }
                 $scope.$apply();
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);
