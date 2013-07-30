@@ -4,3 +4,10 @@
 *.iml
 *.ipr
 *.iws
+.idea/*
+.settings/*
+target/*
+logs/*
+project/project
+project/target
+/.target
