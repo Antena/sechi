@@ -1,55 +1,58 @@
 <form class="form-horizontal">
+    <div class="well well-small">
+        {{ resource | json }}
+    </div>
     <fieldset>
         <legend>Indentificación de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
         <div class="form-group">
             <label for="inputName" class="col-lg-2 control-label">Nombre oficial</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputName" placeholder="Nombre oficial">
+                <input type="text" class="form-control" id="inputName" placeholder="Nombre oficial" ng-model="resource.name">
             </div>
         </div>
         <div class="form-group">
             <label for="inputFantasyName" class="col-lg-2 control-label">Nombre de fantasía</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputFantasyName" placeholder="Nombre de fantasía">
+                <input type="text" class="form-control" id="inputFantasyName" placeholder="Nombre de fantasía" ng-model="resource.fantasyName">
             </div>
         </div>
         <div class="form-group">
             <label for="inputTelephone" class="col-lg-2 control-label">Teléfono</label>
             <div class="col-lg-5">
-                <input type="text" class="form-control" id="inputTelephone" placeholder="Teléfono">
+                <input type="text" class="form-control" id="inputTelephone" placeholder="Teléfono" ng-model="resource.telephone">
             </div>
             <div class="col-lg-5">
-                <input type="text" class="form-control" id="inputOtherTelephone" placeholder="Otro teléfono">
+                <input type="text" class="form-control" id="inputOtherTelephone" placeholder="Otro teléfono" ng-model="resource.otherTelephone">
             </div>
         </div>
         <div class="form-group">
             <label for="inputEmail" class="col-lg-2 control-label">Mail</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputEmail" placeholder="Mail">
+                <input type="text" class="form-control" id="inputEmail" placeholder="Mail" ng-model="resource.email">
             </div>
         </div>
         <div class="form-group">
             <label for="inputWebsite" class="col-lg-2 control-label">Website</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputWebsite" placeholder="Website">
+                <input type="text" class="form-control" id="inputWebsite" placeholder="Website" ng-model="resource.website">
             </div>
         </div>
         <div class="form-group">
             <label for="inputOpeningHours" class="col-lg-2 control-label">Horario de atención</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputOpeningHours" placeholder="Horario de atención">
+                <input type="text" class="form-control" id="inputOpeningHours" placeholder="Horario de atención" ng-model="resource.openingHours">
             </div>
         </div>
         <div class="form-group">
             <label for="inputContact" class="col-lg-2 control-label">Contacto/Referente</label>
             <div class="col-lg-6">
-                <input type="text" class="form-control" id="inputContact" placeholder="Nombre">
+                <input type="text" class="form-control" id="inputContact" placeholder="Nombre" ng-model="resource.contact.name">
             </div>
             <div class="col-lg-2">
-                <input type="text" class="form-control" id="inputOtherContactTelephone" placeholder="Teléfono">
+                <input type="text" class="form-control" id="inputOtherContactTelephone" placeholder="Teléfono" ng-model="resource.contact.telephone">
             </div>
             <div class="col-lg-2">
-                <input type="text" class="form-control" id="inputOtherContactTitle" placeholder="Cargo">
+                <input type="text" class="form-control" id="inputOtherContactTitle" placeholder="Cargo" ng-model="resource.contact.title">
             </div>
         </div>
     </fieldset>
