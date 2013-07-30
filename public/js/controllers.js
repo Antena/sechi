@@ -79,14 +79,24 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         $scope.geocoder.geocode( { 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 var location = results[0].geometry.location;
-                $scope.resource.address.lat = location.jb;
-                $scope.resource.address.lng = location.kb;
+                $scope.resource.address.lat = location.lat();
+                $scope.resource.address.lng = location.lng();
                 $scope.map.setCenter(location);
                 $scope.map.setZoom(15);
-                new google.maps.Marker({
+                var marker = new google.maps.Marker({
                     map: $scope.map,
-                    position: location
+                    position: location,
+                    draggable: true
                 });
+                google.maps.event.addListener(
+                    marker,
+                    'drag',
+                    function() {
+                        $scope.resource.address.lat = marker.position.lat();
+                        $scope.resource.address.lng = marker.position.lng();
+                        $scope.$apply();
+                    }
+                );
                 $scope.$apply();
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);
