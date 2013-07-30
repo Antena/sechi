@@ -14,3 +14,10 @@ GET		/resources/:id				controllers.ResourcesController.get(id :String)
 PUT		/resources					controllers.ResourcesController.insert()
 POST	/resources					controllers.ResourcesController.update()
 DELETE	/resources/:id				controllers.ResourcesController.delete(id: String)
+
+# records
+GET		/users					controllers.UsersController.list()
+GET		/users/:id				controllers.UsersController.get(id :String)
+PUT		/users					controllers.UsersController.insert()
+POST	/users					controllers.UsersController.update()
+DELETE	/users/:id				controllers.UsersController.delete(id: String)

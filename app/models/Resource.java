@@ -9,7 +9,7 @@ import org.jongo.marshall.jackson.oid.Id;
 
 import uk.co.panaxiom.playjongo.PlayJongo;
 
-public class Resource {
+public class Resource extends JongoModel {
 
 	@org.jongo.marshall.jackson.oid.ObjectId
 	@Id
@@ -38,6 +38,7 @@ public class Resource {
 	public static void update(Resource resource) {
 		resources().save(resource);
 	}
+	
 
 	public static void remove(String id) {
 		resources().remove(new ObjectId(id));
