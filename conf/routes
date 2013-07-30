@@ -9,3 +9,8 @@ GET     /                           controllers.Application.index()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # records
+GET		/resources					controllers.ResourcesController.list()
+GET		/resources/:id				controllers.ResourcesController.get(id :String)
+PUT		/resources					controllers.ResourcesController.insert()
+POST	/resources					controllers.ResourcesController.update()
+DELETE	/resources/:id				controllers.ResourcesController.delete(id: String)

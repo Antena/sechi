@@ -24,7 +24,6 @@ public class PlayJongo {
         String host = PlayConfig.getString("playjongo.host");
         String port = PlayConfig.getString("playjongo.port");
         String dbName = PlayConfig.getString("playjongo.db");
-        String testDbName = PlayConfig.getString("playjongo.test.db");
         
         MongoURI uri = new MongoURI("mongodb://" + host + ":" + port + "/" + dbName);
         Logger.info("Connecting to MongoDB at " + uri + "...");
