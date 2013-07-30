@@ -16,8 +16,11 @@ controllers.controller('ResourceController', ['$scope', '$rootScope', function($
 controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'OrganizationType', function($scope, $rootScope, OrganizationType) {
     $rootScope.page = 'resource';
     $scope.editing = true;
+    $scope.organizationTypes = OrganizationType;
+
     $scope.resource = {
-        address: {lat: null, lng: null}
+        address: { lat: null, lng: null },
+        organizationTypes: $scope.organizationTypes
     };
 
     $scope.steps = [
@@ -95,8 +98,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         }
         $scope.mapLoaded = true;
     }
-
-    $scope.organizationTypes = OrganizationType;
 
     $scope.geocoder = new google.maps.Geocoder();
     $scope.geocode = function() {

@@ -20,6 +20,7 @@ services.factory('OrganizationType', [function() {
             { label: "Sede Comunal" },
             { label: "Asesoría General Tutelar" }
         ],
+        StateOther: null,
         NonState: [
             { label: "Asociación Civil" },
             { label: "Polideportivo" },
@@ -34,6 +35,7 @@ services.factory('OrganizationType', [function() {
             { label: "Centro Cultural" },
             { label: "Juegoteca" },
             { label: "Hogar para niños y adolescentes" }
-        ]
+        ],
+        NonStateOther: null
     }
 }])
