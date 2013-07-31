@@ -15,17 +15,74 @@
                 <div class="modal-body">
                     <form>
                         <fieldset>
-                            <label for="inputAddress" class="col-lg-12 control-label">Actividad</label>
-                            <div class="col-lg-2">
-                                <input type="text" class="form-control" id="inputAddress" placeholder="Nº" ng-model="selectedCode" ng-change="codeEntered(selectedCode)">
+                            <div class="col-12">
+                                <label class="col-lg-12 control-label">Actividad</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" id="inputAddress" placeholder="Nº" ng-model="selectedCode" ng-change="codeEntered(selectedCode)">
+                                </div>
+                                <div class="col-lg-5">
+                                    <select class="form-control" ng-model="selectedTopic" ng-options="topic for topic in activityTypes.topics()" ng-change="topicChange()">
+                                    </select>
+                                </div>
+                                <div class="col-lg-5">
+                                    <select class="form-control" ng-model="selectedType" ng-options="type.name for type in activityTypes.types | filterByTopic:selectedTopic" ng-change="typeChange(selectedType)">
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-lg-5">
-                                <select class="form-control" ng-model="selectedTopic" ng-options="topic for topic in activityTypes.topics()" ng-change="topicChange()">
-                                </select>
+
+                            <div class="col-lg-12" style="margin-top: 15px">
+                                <div class="col-lg-4">
+                                    <label class="control-label">Género</label>
+                                    <select class="form-control">
+                                        <option>M</option>
+                                        <option>F</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="control-label">Cupo</label>
+                                    <select class="form-control">
+                                        <option>A: 1-5</option>
+                                        <option>B: hasta 20</option>
+                                        <option>C: más de 20</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="control-label">Edad</label>
+                                    <select class="form-control">
+                                        <option>A: 0-4</option>
+                                        <option>B: 5-6</option>
+                                        <option>C: 7-13</option>
+                                        <option>D: 14-17</option>
+                                        <option>E: Adultos</option>
+                                        <option>F: Tercera Edad</option>
+                                        <option>G: Todas las Edades</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-lg-5">
-                                <select class="form-control" ng-model="selectedType" ng-options="type.name for type in activityTypes.types | filterByTopic:selectedTopic" ng-change="typeChange(selectedType)">
-                                </select>
+
+                            <div class="col-lg-12" style="margin-top: 15px">
+                                <div class="col-lg-12">
+                                    <label class="control-label">Día</label>
+                                    <input type="text" class="form-control" placeholder="Ej: Lun a Vie; Mar y Sáb; Lun, Mar y Vie"/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12" style="margin-top: 15px">
+                                <div class="col-lg-6">
+                                    <label class="control-label">Frecuencia</label>
+                                    <select class="form-control">
+                                        <option>Semanal</option>
+                                        <option>Quincenal</option>
+                                        <option>Mensual</option>
+                                        <option>Semestral</option>
+                                        <option>Anual</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="control-label">Horarios</label>
+                                    <input type="text" class="form-control" placeholder="Ej: 17:30 a 18:30"/>
+                                </div>
                             </div>
                         </fieldset>
                     </form>
