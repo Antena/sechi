@@ -25,7 +25,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.steps = [
 
-        { step: 0, title: "Indentificación de la organización", template:"assets/partials/form/step1.html", completed: false },
+        { step: 0, title: "Indentificación de la organización", template:"assets/partials/form/step4.html", completed: false },
         { step: 1, title: "Dirección", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()" },
         { step: 2, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false },
         { step: 3, title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false },
@@ -161,3 +161,37 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         $scope.map.setCenter(location);
     }
 }])
+
+controllers.controller('ActivityController', ['$scope', 'ActivityType', function($scope, ActivityType) {
+    $scope.activityTypes = ActivityType;
+
+    $scope.topicChange = function() {
+        $scope.selectedCode = null;
+        $scope.selectedType = null;
+    }
+
+    $scope.typeChange = function(type) {
+        $scope.selectedCode = type.code;
+    }
+
+    $scope.codeEntered = function(code) {
+        var filteredType = $scope.activityTypes.types.filter(function (type) {
+            return type.code == parseInt(code);
+        });
+        if (filteredType.length > 0) {
+            $scope.selectedTopic = filteredType[0].topic;
+            $scope.selectedType = filteredType[0];
+        } else {
+            $scope.selectedTopic = null;
+            $scope.selectedType = null;
+        }
+    }
+
+
+}])
+
+controllers.filter('filterByTopic', function() {
+    return function(types, topic) {
+        return types.filter(function(type) { return type.topic == topic })
+    }
+})

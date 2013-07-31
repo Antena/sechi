@@ -1,8 +1,40 @@
 <form>
-    <div class="well well-small">
-        {{ resource | json }}
-    </div>
     <fieldset>
         <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
     </fieldset>
+    <a data-toggle="modal" href="#activityModal" class="btn btn-primary btn-large" prevent-click>Launch demo modal</a>
+
+    <!-- Modal -->
+    <div class="modal fade" id="activityModal" ng-controller="ActivityController">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Agregar nueva actividad</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <fieldset>
+                            <label for="inputAddress" class="col-lg-12 control-label">Actividad</label>
+                            <div class="col-lg-2">
+                                <input type="text" class="form-control" id="inputAddress" placeholder="Nº" ng-model="selectedCode" ng-change="codeEntered(selectedCode)">
+                            </div>
+                            <div class="col-lg-5">
+                                <select class="form-control" ng-model="selectedTopic" ng-options="topic for topic in activityTypes.topics()" ng-change="topicChange()">
+                                </select>
+                            </div>
+                            <div class="col-lg-5">
+                                <select class="form-control" ng-model="selectedType" ng-options="type.name for type in activityTypes.types | filterByTopic:selectedTopic" ng-change="typeChange(selectedType)">
+                                </select>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn">Close</a>
+                    <a href="#" class="btn btn-primary">Save changes</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </form>
