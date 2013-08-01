@@ -14,7 +14,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
-public class Resource extends JongoModel {
+public class Resource {
 
 	@org.jongo.marshall.jackson.oid.ObjectId
 	@Id
@@ -61,7 +61,11 @@ public class Resource extends JongoModel {
 	}
 
 	public static void save(JsonNode postData) {
-		Object parse = com.mongodb.util.JSON.parse(postData.toString());
-		resources().getDBCollection().save((DBObject) parse);
+		DBObject parse =(DBObject) com.mongodb.util.JSON.parse(postData.toString());
+		JsonNode id = postData.get("_id");
+		if(id!=null)
+			parse.put("_id", new ObjectId(id.asText()));
+		
+		resources().getDBCollection().save(parse);
 	}
 }

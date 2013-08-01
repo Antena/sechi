@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<div class="container">
+    <div class="row">
+        <h1>Recursos</h1>
+        <table class="table table-striped">
+            <thead>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Entrevistado</th>
+                <th>Estado</th>
+                <th></th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="r in resources">
+                <td>{{r.name}}</td>
+                <td>{{r.date}}</td>
+                <td>bla</td>
+                <td>Entrevistado</td>
+                <td></td>
+                <td><a href="/#/recurso/{{r.id}}">Ver</a></td>
+            </tr>
+            <tbody/>
+        </table>
+
+    </div>
+</div>
+</html>

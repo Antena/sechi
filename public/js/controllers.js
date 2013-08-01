@@ -9,13 +9,50 @@ controllers.controller('MapController', ['$scope', '$rootScope', function($scope
     $rootScope.page = 'map';
 }])
 
-controllers.controller('ResourceController', ['$scope', '$rootScope', function($scope, $rootScope) {
-    $rootScope.page = 'resource';
+controllers.controller('ResourceListController', ['$scope', '$rootScope','$http', function($scope, $rootScope,$http) {
+    $rootScope.page = 'list';
+    $http({method: 'GET', url: '/resources'}).
+        success(function (data, status, headers, config) {
+            data.map(function (d) {
+                d.id = d._id.$oid;
+            });
+            $scope.resources = data;
+
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
+
+
 }])
 
-controllers.controller('ResourceDetailController', ['$scope', '$rootScope', function($scope, $rootScope) {
+
+controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'OrganizationType','$http','$location', function($scope, $rootScope, OrganizationType,$http,$location) {
     $rootScope.page = 'resource';
     $scope.editing = true;
+
+
+    $scope.resource = {
+        address: {lat: null, lng: null}
+    };
+
+    var urls=$location.path().split('/');
+    if(urls.length==3) {
+        var id = urls[urls.length-1];
+        $http({method: 'GET', url: '/resources/'+id}).
+            success(function (data, status, headers, config) {
+                $scope.resource=data;
+                $scope.resource._id=$scope.resource._id.$oid;
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+    }
+
+
+
 
     $scope.steps = [
 
@@ -53,7 +90,15 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', func
     $scope.finish = function() {
         $(".progress-bar").css("width", "100%");
         $scope.steps[$scope.currentStep].completed = true;
-        console.log("submit the form");        //TODO(gb): Remove trace!!!
+
+        $http({method: 'PUT', url: '/resources', data:$scope.resource}).
+            success(function (data, status, headers, config) {
+                console.log('submitted ok')
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
     }
 
     $scope.initMap = function() {
@@ -63,8 +108,72 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', func
                 zoom: 11,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-            var map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
+            $scope.map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
+            google.maps.event.addListener($scope.map, 'click', function(event) {
+                if (!$scope.marker) {
+                    $scope.marker = new google.maps.Marker({
+                        position: event.latLng,
+                        map: $scope.map,
+                        draggable: true
+                    })
+                    $scope.resource.address.lat = event.latLng.lat();
+                    $scope.resource.address.lng = event.latLng.lng();
+                    google.maps.event.addListener(
+                        $scope.marker,
+                        'drag',
+                        function() {
+                            $scope.resource.address.lat = $scope.marker.position.lat();
+                            $scope.resource.address.lng = $scope.marker.position.lng();
+                            $scope.$apply();
+                        }
+                    );
+                } else {
+                    $scope.marker.setPosition(event.latLng);
+                    $scope.resource.address.lat = event.latLng.lat();
+                    $scope.resource.address.lng = event.latLng.lng();
+                }
+                $scope.$apply();
+            });
         }
         $scope.mapLoaded = true;
+    }
+
+    $scope.organizationTypes = OrganizationType;
+
+    $scope.geocoder = new google.maps.Geocoder();
+    $scope.geocode = function() {
+        var address = $scope.resource.address.street + " " + $scope.resource.address.number + " Ciudad De Buenos Aires, Buenos Aires Province, Argentina";
+        console.log("Geocoding '" + address + "'...");        //TODO(gb): Remove trace!!!
+
+        $scope.geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var location = results[0].geometry.location;
+                $scope.resource.address.lat = location.lat();
+                $scope.resource.address.lng = location.lng();
+                $scope.map.setCenter(location);
+                $scope.map.setZoom(15)
+                if (!$scope.marker) {
+                    $scope.marker = new google.maps.Marker({
+                        map: $scope.map,
+                        position: location,
+                        draggable: true
+                    });
+                    google.maps.event.addListener(
+                        $scope.marker,
+                        'drag',
+                        function() {
+                            $scope.resource.address.lat = $scope.marker.position.lat();
+                            $scope.resource.address.lng = $scope.marker.position.lng();
+                            $scope.$apply();
+                        }
+                    );
+                } else {
+                    $scope.marker.setPosition(location);
+                }
+                $scope.$apply();
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
     }
 }])

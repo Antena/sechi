@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" ng-controller="ResourceListController">
     <div class="row">
         <div class="col-12">
             <ul class="nav nav-pills">
@@ -20,7 +20,7 @@
         <ng-include src="step.template"></ng-include>
         <div class="pull-right">
             <button type="button" class="btn btn-default" ng-click="prev()" ng-show="!$first">Anterior</button>
-            <button type="button" class="btn btn-primary" ng-click="next(step)" ng-hide="$last">Siguiente</button>
+            <button type="button" class="btn btn-primary" ng-click="next()" ng-hide="$last">Siguiente</button>
             <button type="button" class="btn btn-success" ng-click="finish()" ng-show="$last">Finalizar</button>
         </div>
     </div>
