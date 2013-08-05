@@ -32,9 +32,10 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     $rootScope.page = 'resource';
     $scope.editing = true;
 
-    $scope.resource = {
+    $rootScope.resource = {
         address: { lat: null, lng: null },
-        organizationTypes: $scope.organizationTypes
+        organizationTypes: $scope.organizationTypes,
+        activities: []
     };
 
     var urls=$location.path().split('/');
@@ -200,3 +201,75 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         $scope.map.setCenter(location);
     }
 }])
+
+controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityType', function($scope, $rootScope, ActivityType) {
+    $scope.activityTypes = ActivityType;
+    $scope.activity = {};
+    $scope.editing = false;
+
+    $scope.topicChange = function() {
+        $scope.selectedCode = null;
+        $scope.selectedType = null;
+    }
+
+    $scope.typeChange = function(type) {
+        $scope.activity.code = type.code;
+    }
+
+    $scope.codeEntered = function() {
+        var filteredType = $scope.activityTypes.types.filter(function (type) {
+            return type.code == parseInt($scope.activity.code);
+        });
+        if (filteredType.length > 0) {
+            $scope.selectedTopic = filteredType[0].topic;
+            $scope.selectedType = filteredType[0];
+        } else {
+            $scope.selectedTopic = null;
+            $scope.selectedType = null;
+        }
+    }
+
+    $scope.closeModal = function() {
+        $scope.activity = {};
+        $('#activityModal').modal('hide');
+        $scope.editing = false;
+    }
+
+    $scope.edit = function(activityId) {
+        $scope.editing = true;
+        $scope.activity = $rootScope.resource.activities[activityId];
+        $('#activityModal').modal('show');
+    }
+
+    $scope.setActivityToDelete = function(activityId) {
+        $scope.activityToDelete = activityId;
+    }
+
+    $scope.delete = function() {
+        var activityId = $scope.activityToDelete;
+        $rootScope.resource.activities.splice(activityId, 1);
+        for (var i=0; i<$rootScope.resource.activities.length; i++) {
+            $rootScope.resource.activities[i].id = i;
+        }
+        $scope.activityToDelete = null;
+        $('#deleteModal').modal('hide');
+    }
+
+    $scope.save = function() {
+        $scope.activity.id = $rootScope.resource.activities.length;
+        $rootScope.resource.activities.push($scope.activity);
+        $scope.closeModal();
+    }
+
+    $scope.update = function(activityId) {
+        $rootScope.resource.activities[activityId] = $scope.activity;
+        $scope.closeModal();
+    }
+
+}])
+
+controllers.filter('filterByTopic', function() {
+    return function(types, topic) {
+        return types.filter(function(type) { return type.topic == topic })
+    }
+})
