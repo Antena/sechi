@@ -25,7 +25,7 @@
             <button type="button" class="btn btn-default" ng-click="prev()" ng-show="!$first">Anterior</button>
             <button type="button" class="btn btn-primary" ng-click="next()" ng-hide="$last">Siguiente</button>
             <button type="button" class="btn btn-success" ng-click="update($event)" ng-show="resource._id && $last" data-loading-text="Guardando...">Guardar cambios</button>
-            <button type="button" class="btn btn-success" ng-click="finish()" ng-show="$last && !resource._id">Finalizar</button>
+            <button type="button" class="btn btn-success" ng-click="finish($event)" ng-show="$last && !resource._id" data-loading-text="Finalizando...">Finalizar</button>
         </div>
     </div>
 </div>
