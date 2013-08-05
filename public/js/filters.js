@@ -12,3 +12,12 @@ filters.filter('truncate', [function() {
         return  toLong ? s_ + '...' : s_;
     }
 }])
+
+filters.filter('activityName', ['ActivityType', function(ActivityType) {
+    return function(code) {
+        var type = ActivityType.types.filter(function(type) {
+            return type.code == code;
+        })[0];
+        return type.name + " (" + type.topic + ")";
+    }
+}])

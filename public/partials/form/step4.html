@@ -20,7 +20,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="a in resource.activities">
-                <td>{{ a.code }}</td>
+                <td><a href="#" data-toggle="tooltip" title="" data-original-title="{{ a.code | activityName }}" data-placement="right" tooltip prevent-click>{{ a.code }}</a></td>
                 <td>{{ a.description | truncate:35 }}</td>
                 <td>{{ a.gender }}</td>
                 <td>{{ a.quota }}</td>
