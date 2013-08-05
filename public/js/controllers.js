@@ -16,7 +16,7 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
             data.map(function (d) {
                 d.id = d._id.$oid;
             });
-            $scope.resources = data;
+            $rootScope.resources = data;
 
         }).
         error(function (data, status, headers, config) {
@@ -44,7 +44,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         $http({method: 'GET', url: '/resources/'+id}).
             success(function (data, status, headers, config) {
                 $rootScope.resource = data;
-                $rootScope.resource._id = $scope.resource._id.$oid;
+                $rootScope.resource._id = $rootScope.resource._id.$oid;
                 $scope.steps.map(function(step) {
                     step.completed = true;
                 })
@@ -55,11 +55,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             });
     }
 
-
-
-
     $scope.steps = [
-
         { step: 0, title: "Indentificación de la organización", template:"assets/partials/form/step1.html", completed: false },
         { step: 1, title: "Dirección", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()" },
         { step: 2, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false },
@@ -95,7 +91,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         $(".progress-bar").css("width", "100%");
         $scope.steps[$scope.currentStep].completed = true;
 
-        $http({method: 'PUT', url: '/resources', data:$scope.resource}).
+        $http({method: 'PUT', url: '/resources', data:$rootScope.resource}).
             success(function (data, status, headers, config) {
                 $location.path('/lista')
             }).
@@ -107,51 +103,59 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.initMap = function() {
         if (!$scope.mapLoaded) {
-            var mapOptions = {
-                center: new google.maps.LatLng(-34.63123, -58.441772),
-                zoom: 11,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            $scope.map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
-            google.maps.event.addListener($scope.map, 'click', function(event) {
-                if (!$scope.marker) {
-                    $scope.marker = new google.maps.Marker({
-                        position: event.latLng,
-                        map: $scope.map,
-                        draggable: true
-                    })
-                    $scope.resource.address.lat = event.latLng.lat();
-                    $scope.resource.address.lng = event.latLng.lng();
-                    google.maps.event.addListener(
-                        $scope.marker,
-                        'drag',
-                        function() {
-                            $scope.resource.address.lat = $scope.marker.position.lat();
-                            $scope.resource.address.lng = $scope.marker.position.lng();
-                            $scope.$apply();
-                        }
-                    );
-                } else {
-                    $scope.marker.setPosition(event.latLng);
-                    $scope.resource.address.lat = event.latLng.lat();
-                    $scope.resource.address.lng = event.latLng.lng();
+            setTimeout(function() {
+                console.log("loadmap");        //TODO(gb): Remove trace!!!
+                var mapOptions = {
+                    center: new google.maps.LatLng(-34.63123, -58.441772),
+                    zoom: 11,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                $scope.map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
+
+                if ($rootScope.resource.address && $rootScope.resource.address.lat && $rootScope.resource.address.lng) {
+                    $scope.addMarker();
                 }
-                $scope.$apply();
-            });
+
+                google.maps.event.addListener($scope.map, 'click', function(event) {
+                    if (!$scope.marker) {
+                        $scope.marker = new google.maps.Marker({
+                            position: event.latLng,
+                            map: $scope.map,
+                            draggable: true
+                        })
+                        $rootScope.resource.address.lat = event.latLng.lat();
+                        $rootScope.resource.address.lng = event.latLng.lng();
+                        google.maps.event.addListener(
+                            $scope.marker,
+                            'drag',
+                            function() {
+                                $rootScope.resource.address.lat = $scope.marker.position.lat();
+                                $rootScope.resource.address.lng = $scope.marker.position.lng();
+                                $scope.$apply();
+                            }
+                        );
+                    } else {
+                        $scope.marker.setPosition(event.latLng);
+                        $rootScope.resource.address.lat = event.latLng.lat();
+                        $rootScope.resource.address.lng = event.latLng.lng();
+                    }
+                    $scope.$apply();
+                });
+            }, 1000)
         }
         $scope.mapLoaded = true;
     }
 
     $scope.geocoder = new google.maps.Geocoder();
     $scope.geocode = function() {
-        var address = $scope.resource.address.street + " " + $scope.resource.address.number + " Ciudad De Buenos Aires, Buenos Aires Province, Argentina";
+        var address = $rootScope.resource.address.street + " " + $rootScope.resource.address.number + " Ciudad De Buenos Aires, Buenos Aires Province, Argentina";
         console.log("Geocoding '" + address + "'...");
 
         $scope.geocoder.geocode( { 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 var location = results[0].geometry.location;
-                $scope.resource.address.lat = location.lat();
-                $scope.resource.address.lng = location.lng();
+                $rootScope.resource.address.lat = location.lat();
+                $rootScope.resource.address.lng = location.lng();
                 $scope.map.setCenter(location);
                 if (!$scope.marker) {
                     $scope.marker = new google.maps.Marker({
@@ -163,8 +167,8 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                         $scope.marker,
                         'drag',
                         function() {
-                            $scope.resource.address.lat = $scope.marker.position.lat();
-                            $scope.resource.address.lng = $scope.marker.position.lng();
+                            $rootScope.resource.address.lat = $scope.marker.position.lat();
+                            $rootScope.resource.address.lng = $scope.marker.position.lng();
                             $scope.$apply();
                         }
                     );
@@ -179,10 +183,10 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.addMarker = function() {
-        var location = new google.maps.LatLng($scope.resource.address.lat, $scope.resource.address.lng);
+        var location = new google.maps.LatLng($rootScope.resource.address.lat, $rootScope.resource.address.lng);
         if (!$scope.marker) {
-            $scope.resource.address.lat = location.lat();
-            $scope.resource.address.lng = location.lng();
+            $rootScope.resource.address.lat = location.lat();
+            $rootScope.resource.address.lng = location.lng();
 
             $scope.marker = new google.maps.Marker({
                 map: $scope.map,
@@ -193,8 +197,8 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 $scope.marker,
                 'drag',
                 function() {
-                    $scope.resource.address.lat = $scope.marker.position.lat();
-                    $scope.resource.address.lng = $scope.marker.position.lng();
+                    $rootScope.resource.address.lat = $scope.marker.position.lat();
+                    $rootScope.resource.address.lng = $scope.marker.position.lng();
                     $scope.$apply();
                 }
             );

@@ -9,6 +9,18 @@
 #address-map {
     width: 100%;
     height: 400px;
+    background: url('/assets/img/ajax-loader.gif');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+
+}
+
+#address-map img {
+    max-width: none;
+}
+
+#address-map label {
+    width: auto; display:inline;
 }
 
 .input-inline {
