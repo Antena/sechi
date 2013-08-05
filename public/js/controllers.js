@@ -87,6 +87,20 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             $scope.currentStep = index;
     }
 
+    $scope.update = function(e) {
+        console.log(e);        //TODO(gb): Remove trace!!!
+        var elem = angular.element(e.toElement);
+        $(elem).button('loading');
+        $http({method: 'PUT', url: '/resources', data:$rootScope.resource}).
+            success(function (data, status, headers, config) {
+                $(elem).button('reset')
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+    }
+
     $scope.finish = function() {
         $(".progress-bar").css("width", "100%");
         $scope.steps[$scope.currentStep].completed = true;
