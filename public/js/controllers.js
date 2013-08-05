@@ -26,7 +26,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.steps = [
 
-        { step: 0, title: "Indentificación de la organización", template:"assets/partials/form/step4.html", completed: false },
+        { step: 0, title: "Indentificación de la organización", template:"assets/partials/form/step1.html", completed: false },
         { step: 1, title: "Dirección", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()" },
         { step: 2, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false },
         { step: 3, title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false },
@@ -166,6 +166,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityType', function($scope, $rootScope, ActivityType) {
     $scope.activityTypes = ActivityType;
     $scope.activity = {};
+    $scope.editing = false;
 
     $scope.topicChange = function() {
         $scope.selectedCode = null;
@@ -192,12 +193,38 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
     $scope.closeModal = function() {
         $scope.activity = {};
         $('#activityModal').modal('hide');
+        $scope.editing = false;
+    }
+
+    $scope.edit = function(activityId) {
+        $scope.editing = true;
+        $scope.activity = $rootScope.resource.activities[activityId];
+        $('#activityModal').modal('show');
+    }
+
+    $scope.setActivityToDelete = function(activityId) {
+        $scope.activityToDelete = activityId;
+    }
+
+    $scope.delete = function() {
+        var activityId = $scope.activityToDelete;
+        $rootScope.resource.activities.splice(activityId, 1);
+        for (var i=0; i<$rootScope.resource.activities.length; i++) {
+            $rootScope.resource.activities[i].id = i;
+        }
+        $scope.activityToDelete = null;
+        $('#deleteModal').modal('hide');
     }
 
     $scope.save = function() {
+        $scope.activity.id = $rootScope.resource.activities.length;
         $rootScope.resource.activities.push($scope.activity);
-        $scope.activity = {};
-        $('#activityModal').modal('hide');
+        $scope.closeModal();
+    }
+
+    $scope.update = function(activityId) {
+        $rootScope.resource.activities[activityId] = $scope.activity;
+        $scope.closeModal();
     }
 
 }])

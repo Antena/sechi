@@ -1,7 +1,10 @@
-<form>
+<form ng-controller="ActivityController">
     <fieldset>
         <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
-        <table class="table table-striped">
+        <div class="alert alert-info" ng-show="resource.activities.length == 0">
+            Aún no hay actividades agregadas para este recurso. <a data-toggle="modal" href="#activityModal" class="btn btn-default btn-small" prevent-click>Agregar nueva actividad</a>
+        </div>
+        <table class="table table-striped" ng-show="resource.activities.length > 0">
             <thead>
             <tr>
                 <th>Actividad</th>
@@ -12,36 +15,60 @@
                 <th>Día</th>
                 <th>Frecuencia</th>
                 <th>Horarios</th>
-                <th></th>
+                <th><a data-toggle="modal" href="#activityModal" class="btn btn-default btn-small" ng-show="resource.activities.length > 0" prevent-click>Agregar nueva actividad</a></th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="a in resource.activities">
                 <td>{{ a.code }}</td>
-                <td>{{ a.description }}</td>
+                <td>{{ a.description | truncate:35 }}</td>
                 <td>{{ a.gender }}</td>
                 <td>{{ a.quota }}</td>
                 <td>{{ a.age }}</td>
-                <td>{{ a.days }}</td>
+                <td>{{ a.days | truncate:30 }}</td>
                 <td>{{ a.frequency }}</td>
-                <td>{{ a.hours }}</td>
+                <td>{{ a.hours | truncate:30 }}</td>
                 <td>
-                    <a class="btn btn-info btn-small" href="#">Editar</a>
-                    <a class="btn btn-danger btn-small" href="#">Eliminar</a>
+                    <a class="btn btn-info btn-small" href="#" ng-click="edit(a.id)" prevent-click>Editar</a>
+                    <a data-toggle="modal" href="#deleteModal" class="btn btn-danger btn-small" ng-click="setActivityToDelete(a.id)">Eliminar</a>
                 </td>
             </tr>
             </tbody>
         </table>
-        <a data-toggle="modal" href="#activityModal" class="btn btn-default" prevent-click>Agregar nueva actividad</a>
+
+        <div class="form-group" style="margin-top: 15px">
+            <label for="inputFunction" class="col-lg-1 control-label" style="text-align: right">Función</label>
+            <div class="col-lg-11">
+                <textarea class="form-control" rows="3" id="inputFunction" placeholder="Describa la función de la organización" ng-model="resource.function"></textarea>
+            </div>
+        </div>
     </fieldset>
 
-
     <!-- Modal -->
-    <div class="modal fade" id="activityModal" ng-controller="ActivityController">
+    <div class="modal fade" id="deleteModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Eliminar actividad</h4>
+                </div>
+                <div class="modal-body">
+                    ¿Está seguro que desea eliminar la actividad?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" ng-click="delete()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="activityModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-hidden="true" ng-click="closeModal()" prevent-click>&times;</button>
                     <h4 class="modal-title">Agregar nueva actividad</h4>
                 </div>
                 <div class="modal-body">
@@ -122,11 +149,15 @@
                         </fieldset>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn" prevent-click ng-click="closeModal()">Cancelar</a>
-                    <a href="#" class="btn btn-primary" ng-click="save()" prevent-click>Agregar actividad</a>
+                <div class="well">
+                    {{ activity.id }}
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                <div class="modal-footer">
+                    <a href="#" class="btn" ng-click="closeModal()" prevent-click>Cancelar</a>
+                    <a href="#" class="btn btn-primary" ng-click="save()" ng-hide="editing" prevent-click>Agregar actividad</a>
+                    <a href="#" class="btn btn-primary" ng-click="update(activity.id)" ng-show="editing" prevent-click>Guardar cambios</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>

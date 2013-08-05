@@ -1,4 +1,4 @@
-var app = angular.module('sechi', ['sechi.controllers', 'sechi.directives', 'sechi.services']);
+var app = angular.module('sechi', ['sechi.controllers', 'sechi.directives', 'sechi.services', 'sechi.filters']);
 
 app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
