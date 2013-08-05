@@ -213,6 +213,7 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
     $scope.topicChange = function() {
         $scope.selectedCode = null;
         $scope.selectedType = null;
+        $scope.activity.code = null;
     }
 
     $scope.typeChange = function(type) {
@@ -238,9 +239,20 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $scope.editing = false;
     }
 
+    $scope.newActivity = function() {
+        $scope.activity = {};
+        $scope.selectedTopic = null;
+        $scope.selectedType = null;
+        $('#activityModal').modal('show');
+        $scope.editing = false;
+    }
+
     $scope.edit = function(activityId) {
         $scope.editing = true;
         $scope.activity = $rootScope.resource.activities[activityId];
+        var type = $scope.activityTypes.types.filter(function(type) { return type.code == $scope.activity.code })[0]
+        $scope.selectedTopic = type.topic;
+        $scope.selectedType = type;
         $('#activityModal').modal('show');
     }
 

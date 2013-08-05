@@ -2,7 +2,7 @@
     <fieldset>
         <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
         <div class="alert alert-info" ng-show="resource.activities.length == 0">
-            Aún no hay actividades agregadas para este recurso. <a data-toggle="modal" href="#activityModal" class="btn btn-default btn-small" prevent-click>Agregar nueva actividad</a>
+            Aún no hay actividades agregadas para este recurso. <a href="#activityModal" class="btn btn-default btn-small" ng-click="newActivity()" prevent-click>Agregar nueva actividad</a>
         </div>
         <table class="table table-striped" ng-show="resource.activities.length > 0">
             <thead>
@@ -15,7 +15,7 @@
                 <th>Día</th>
                 <th>Frecuencia</th>
                 <th>Horarios</th>
-                <th><a data-toggle="modal" href="#activityModal" class="btn btn-default btn-small" ng-show="resource.activities.length > 0" prevent-click>Agregar nueva actividad</a></th>
+                <th><a href="#activityModal" class="btn btn-default btn-small" ng-show="resource.activities.length > 0" ng-click="newActivity()" prevent-click>Agregar nueva actividad</a></th>
             </tr>
             </thead>
             <tbody>

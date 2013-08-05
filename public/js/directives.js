@@ -20,7 +20,6 @@ directives.directive('preventClick', function() {
 
 directives.directive('tooltip', function() {
     return function(scope, element, attrs) {
-        console.log($(element));        //TODO(gb): Remove trace!!!
         $(element).tooltip()
     }
 })

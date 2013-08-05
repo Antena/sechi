@@ -15,6 +15,9 @@ filters.filter('truncate', [function() {
 
 filters.filter('activityName', ['ActivityType', function(ActivityType) {
     return function(code) {
+        if (!code) {
+            return "";
+        }
         var type = ActivityType.types.filter(function(type) {
             return type.code == code;
         })[0];
