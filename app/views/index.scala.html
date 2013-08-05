@@ -35,13 +35,11 @@
                 <a class="navbar-brand" href="#">SECHI</a>
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav navbar-nav">
-                        <li ng-class="{active: page == 'map'}"><a href="/#/">Mapa</a></li>
-                        <li ng-class="{active: page == 'resource'}"><a href="/#/recurso">Agregar nuevo recurso</a></li>
-                        <li ng-class="{active: page == 'list'}"><a href="/#/lista">Ver recursos</a></li>
+                        <li ng-class="{active: page == 'map'}"><a href="/#/" ng-click="page = 'map'">Mapa</a></li>
+                        <li ng-class="{active: page == 'resource'}"><a href="/#/recurso" ng-click="page = 'resource'">Agregar nuevo recurso</a></li>
+                        <li ng-class="{active: page == 'list'}"><a href="/#/lista" ng-click="page = 'list'">Ver recursos</a></li>
+                        <li>{{ page }}</li>
                     </ul>
-                    <form class="navbar-form pull-left" action="">
-                        <input type="text" class="form-control col-lg-8" placeholder="Buscar recurso">
-                    </form>
                     <ul class="nav navbar-nav pull-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">[Nombre de usuario] <b class="caret"></b></a>

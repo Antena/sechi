@@ -43,6 +43,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         var id = urls[urls.length-1];
         $http({method: 'GET', url: '/resources/'+id}).
             success(function (data, status, headers, config) {
+                $rootScope.page = 'resource';
                 $rootScope.resource = data;
                 $rootScope.resource._id = $rootScope.resource._id.$oid;
                 $scope.steps.map(function(step) {
