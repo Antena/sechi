@@ -8,13 +8,15 @@
             </ul>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-hide="resource._id">
         <div class="col-12 status">
             <div class="progress progress-striped active">
                 <div class="progress-bar" style="width: {{ completed / steps.length * 100 }}%"></div>
             </div>
         </div>
     </div>
+
+    <div ng-show="resource._id" style="height: 15px"></div>
 
     <div ng-repeat="step in steps" ng-show="currentStep == step.step">
         <ng-include src="step.template"></ng-include>

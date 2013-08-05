@@ -43,8 +43,11 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         var id = urls[urls.length-1];
         $http({method: 'GET', url: '/resources/'+id}).
             success(function (data, status, headers, config) {
-                $scope.resource=data;
-                $scope.resource._id=$scope.resource._id.$oid;
+                $rootScope.resource = data;
+                $rootScope.resource._id = $scope.resource._id.$oid;
+                $scope.steps.map(function(step) {
+                    step.completed = true;
+                })
             }).
             error(function (data, status, headers, config) {
                 // called asynchronously if an error occurs
@@ -243,11 +246,11 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
 
     $scope.setActivityToDelete = function(activityId) {
         $scope.activityToDelete = activityId;
+        console.log("$scope.activityToDelete= " + $scope.activityToDelete);     //TODO(gb): Remove trace!!!
     }
 
     $scope.delete = function() {
         var activityId = $scope.activityToDelete;
-        console.log($rootScope.resource.activities);        //TODO(gb): Remove trace!!!
         $rootScope.resource.activities.splice(activityId, 1);
         for (var i=0; i<$rootScope.resource.activities.length; i++) {
             $rootScope.resource.activities[i].id = i;
