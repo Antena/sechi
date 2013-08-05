@@ -13,17 +13,21 @@
                 <input type="text" class="form-control" id="inputAddressNumber" placeholder="Altura" ng-model="resource.address.number">
             </div>
             <div class="col-lg-2">
-                <input type="text" class="form-control" id="inputAddressPlot" placeholder="ID Parcela" ng-model="resource.address.plot">
+                <button type="button" class="btn btn-default" ng-class="{disabled: !resource.address.street || !resource.address.number}" ng-click="geocode()">Localizar</button>
             </div>
-            <div class="col-lg-2">
-                <input type="text" class="form-control" id="inputAddressSector" placeholder="Sector" ng-model="resource.address.sector">
-            </div>
+
         </div>
         <div class="form-group">
             <div class="col-lg-2 col-offset-2">
-                <input type="text" class="form-control" id="inputAddressSquare" placeholder="Manzana Nº" ng-model="resource.address.square">
+                <input type="text" class="form-control" id="inputAddressPlot" placeholder="ID Parcela" ng-model="resource.address.plot">
+            </div>
+            <div class="col-lg-1">
+                <input type="text" class="form-control" id="inputAddressSector" placeholder="Sector" ng-model="resource.address.sector">
             </div>
             <div class="col-lg-2">
+                <input type="text" class="form-control" id="inputAddressSquare" placeholder="Manzana Nº" ng-model="resource.address.square">
+            </div>
+            <div class="col-lg-1">
                 <input type="text" class="form-control" id="inputAddressFloor" placeholder="Piso" ng-model="resource.address.floor">
             </div>
             <div class="col-lg-2">
@@ -58,14 +62,18 @@
                 <textarea class="form-control" id="inputAddressDescriptionObservations" rows="3" placeholder="Observaciones" ng-model="resource.address.observations"></textarea>
             </div>
         </div>
-        <div class="col-lg-2">
-            <label class="control-label">Ubicación exacta</label>
+        <div class="col-lg-2" class="form-group" style="text-align: right">
+            <label class="control-label" style="margin-right: 10px">Ubicación exacta</label>
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group col-lg-12 pull-right" style="margin-right: -5px">
-                        <button type="button" class="btn btn-default btn-small" ng-click="geocode()">Obtener de dirección</button>
                         <input type="text" class="form-control" id="exampleAddressLatitude" placeholder="Latitud" ng-model="resource.address.lat">
+                    </div>
+                    <div class="form-group col-lg-12 pull-right" style="margin-right: -5px">
                         <input type="text" class="form-control" id="exampleAddressLongitude" placeholder="Longitud" ng-model="resource.address.lng">
+                    </div>
+                    <div class="form-group col-lg-12 pull-right" style="margin-right: -5px">
+                        <button type="button" class="btn btn-default btn-small" ng-click="addMarker()">Ubicar coordenadas</button>
                     </div>
                 </fieldset>
             </form>

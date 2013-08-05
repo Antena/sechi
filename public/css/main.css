@@ -11,6 +11,10 @@
     height: 400px;
 }
 
+.input-inline {
+    height: 23px;
+}
+
 .bs-footer {
     padding-top: 40px;
     padding-bottom: 30px;

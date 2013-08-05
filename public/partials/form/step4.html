@@ -1,4 +1,7 @@
 <form>
+    <div class="well well-small">
+        {{ resource | json }}
+    </div>
     <fieldset>
         <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
     </fieldset>

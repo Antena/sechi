@@ -1,34 +1,45 @@
 <form>
+    <div class="well well-small">
+        {{ resource | json }}
+    </div>
     <fieldset>
         <legend>Tipo de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
         <div class="col-lg-6">
             <h4>{{ 'Estatal' | uppercase }}</h4>
+            <hr/>
             <div class="checkbox col-lg-6" ng-repeat="type in organizationTypes.State" style="margin-top: -5px;">
                 <label>
-                    <input type="checkbox" value=""ng-model="type.checked">
+                    <input type="checkbox" value="" ng-model="type.checked">
                     {{ type.label }}
                 </label>
             </div>
-            <div class="checkbox col-lg-6" style="margin-top: -5px;">
+            <div class="checkbox col-lg-1" style="margin-top: -5px;">
                 <label>
-                    <input type="checkbox" value="">
-                    Otra <input type="text" class="form-control" placeholder="Otra">
+                    <input type="checkbox" value="" ng-checked="organizationTypes.StateOther">
+                    Otra
                 </label>
+            </div>
+            <div class="checkbox col-lg-5">
+                <input type="text" class="form-control input-inline" ng-model="organizationTypes.StateOther">
             </div>
         </div>
         <div class="col-lg-6">
             <h4>{{ 'No Estatal' | uppercase }}</h4>
+            <hr/>
             <div class="checkbox col-lg-6" ng-repeat="type in organizationTypes.NonState" style="margin-top: -5px;">
                 <label>
-                    <input type="checkbox" value="">
+                    <input type="checkbox" value="" ng-model="type.checked">
                     {{ type.label }}
                 </label>
             </div>
-            <div class="checkbox col-lg-6" style="margin-top: -5px;">
+            <div class="checkbox col-lg-1" style="margin-top: -5px;">
                 <label>
-                    <input type="checkbox" value="">
-                    Otra <input type="text" class="form-control" placeholder="Otra">
+                    <input type="checkbox" value="" ng-checked="organizationTypes.NonStateOther">
+                    Otra
                 </label>
+            </div>
+            <div class="checkbox col-lg-5">
+                <input type="text" class="form-control input-inline" ng-model="organizationTypes.NonStateOther">
             </div>
         </div>
     </fieldset>
