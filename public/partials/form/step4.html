@@ -1,8 +1,40 @@
 <form>
     <fieldset>
         <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Actividad</th>
+                <th>Descripción</th>
+                <th>Género</th>
+                <th>Cupo</th>
+                <th>Edad</th>
+                <th>Día</th>
+                <th>Frecuencia</th>
+                <th>Horarios</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="a in resource.activities">
+                <td>{{ a.code }}</td>
+                <td>{{ a.description }}</td>
+                <td>{{ a.gender }}</td>
+                <td>{{ a.quota }}</td>
+                <td>{{ a.age }}</td>
+                <td>{{ a.days }}</td>
+                <td>{{ a.frequency }}</td>
+                <td>{{ a.hours }}</td>
+                <td>
+                    <a class="btn btn-info btn-small" href="#">Editar</a>
+                    <a class="btn btn-danger btn-small" href="#">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a data-toggle="modal" href="#activityModal" class="btn btn-default" prevent-click>Agregar nueva actividad</a>
     </fieldset>
-    <a data-toggle="modal" href="#activityModal" class="btn btn-primary btn-large" prevent-click>Launch demo modal</a>
+
 
     <!-- Modal -->
     <div class="modal fade" id="activityModal" ng-controller="ActivityController">
@@ -18,7 +50,7 @@
                             <div class="col-12">
                                 <label class="col-lg-12 control-label">Actividad</label>
                                 <div class="col-lg-2">
-                                    <input type="text" class="form-control" id="inputAddress" placeholder="Nº" ng-model="selectedCode" ng-change="codeEntered(selectedCode)">
+                                    <input type="text" class="form-control" placeholder="Nº" ng-model="activity.code" ng-change="codeEntered()">
                                 </div>
                                 <div class="col-lg-5">
                                     <select class="form-control" ng-model="selectedTopic" ng-options="topic for topic in activityTypes.topics()" ng-change="topicChange()">
@@ -28,35 +60,38 @@
                                     <select class="form-control" ng-model="selectedType" ng-options="type.name for type in activityTypes.types | filterByTopic:selectedTopic" ng-change="typeChange(selectedType)">
                                     </select>
                                 </div>
+                                <div class="col-lg-12" style="margin-top: 5px">
+                                    <textarea class="form-control" rows="3" placeholder="Descripción" ng-model="activity.description"></textarea>
+                                </div>
                             </div>
 
                             <div class="col-lg-12" style="margin-top: 15px">
                                 <div class="col-lg-4">
                                     <label class="control-label">Género</label>
-                                    <select class="form-control">
-                                        <option>M</option>
-                                        <option>F</option>
-                                        <option>Otro</option>
+                                    <select class="form-control" ng-model="activity.gender">
+                                        <option value="M">M</option>
+                                        <option value="F">F</option>
+                                        <option value="Otro">Otro</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-4">
                                     <label class="control-label">Cupo</label>
-                                    <select class="form-control">
-                                        <option>A: 1-5</option>
-                                        <option>B: hasta 20</option>
-                                        <option>C: más de 20</option>
+                                    <select class="form-control" ng-model="activity.quota">
+                                        <option value="1-5">A: 1-5</option>
+                                        <option value="hasta 20">B: hasta 20</option>
+                                        <option value="más de 20">C: más de 20</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-4">
                                     <label class="control-label">Edad</label>
-                                    <select class="form-control">
-                                        <option>A: 0-4</option>
-                                        <option>B: 5-6</option>
-                                        <option>C: 7-13</option>
-                                        <option>D: 14-17</option>
-                                        <option>E: Adultos</option>
-                                        <option>F: Tercera Edad</option>
-                                        <option>G: Todas las Edades</option>
+                                    <select class="form-control" ng-model="activity.age">
+                                        <option value="0-4">A: 0-4</option>
+                                        <option value="5-6">B: 5-6</option>
+                                        <option value="7-13">C: 7-13</option>
+                                        <option value="14-17">D: 14-17</option>
+                                        <option value="Adultos">E: Adultos</option>
+                                        <option value="Tercera Edad">F: Tercera Edad</option>
+                                        <option value="Todas las Edades">G: Todas las Edades</option>
                                     </select>
                                 </div>
                             </div>
@@ -64,32 +99,32 @@
                             <div class="col-lg-12" style="margin-top: 15px">
                                 <div class="col-lg-12">
                                     <label class="control-label">Día</label>
-                                    <input type="text" class="form-control" placeholder="Ej: Lun a Vie; Mar y Sáb; Lun, Mar y Vie"/>
+                                    <input type="text" class="form-control" ng-model="activity.days" placeholder="Ej: Lun a Vie; Mar y Sáb; Lun, Mar y Vie"/>
                                 </div>
                             </div>
 
                             <div class="col-lg-12" style="margin-top: 15px">
                                 <div class="col-lg-6">
                                     <label class="control-label">Frecuencia</label>
-                                    <select class="form-control">
-                                        <option>Semanal</option>
-                                        <option>Quincenal</option>
-                                        <option>Mensual</option>
-                                        <option>Semestral</option>
-                                        <option>Anual</option>
+                                    <select class="form-control" ng-model="activity.frequency">
+                                        <option value="Semanal">Semanal</option>
+                                        <option value="Quincenal">Quincenal</option>
+                                        <option value="Mensual">Mensual</option>
+                                        <option value="Semestral">Semestral</option>
+                                        <option value="Anual">Anual</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-6">
                                     <label class="control-label">Horarios</label>
-                                    <input type="text" class="form-control" placeholder="Ej: 17:30 a 18:30"/>
+                                    <input type="text" class="form-control" ng-model="activity.hours" placeholder="Ej: 17:30 a 18:30"/>
                                 </div>
                             </div>
                         </fieldset>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn">Close</a>
-                    <a href="#" class="btn btn-primary">Save changes</a>
+                    <a href="#" class="btn" prevent-click ng-click="closeModal()">Cancelar</a>
+                    <a href="#" class="btn btn-primary" ng-click="save()" prevent-click>Agregar actividad</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

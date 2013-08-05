@@ -18,9 +18,10 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     $scope.editing = true;
     $scope.organizationTypes = OrganizationType;
 
-    $scope.resource = {
+    $rootScope.resource = {
         address: { lat: null, lng: null },
-        organizationTypes: $scope.organizationTypes
+        organizationTypes: $scope.organizationTypes,
+        activities: []
     };
 
     $scope.steps = [
@@ -162,8 +163,9 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 }])
 
-controllers.controller('ActivityController', ['$scope', 'ActivityType', function($scope, ActivityType) {
+controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityType', function($scope, $rootScope, ActivityType) {
     $scope.activityTypes = ActivityType;
+    $scope.activity = {};
 
     $scope.topicChange = function() {
         $scope.selectedCode = null;
@@ -171,12 +173,12 @@ controllers.controller('ActivityController', ['$scope', 'ActivityType', function
     }
 
     $scope.typeChange = function(type) {
-        $scope.selectedCode = type.code;
+        $scope.activity.code = type.code;
     }
 
-    $scope.codeEntered = function(code) {
+    $scope.codeEntered = function() {
         var filteredType = $scope.activityTypes.types.filter(function (type) {
-            return type.code == parseInt(code);
+            return type.code == parseInt($scope.activity.code);
         });
         if (filteredType.length > 0) {
             $scope.selectedTopic = filteredType[0].topic;
@@ -187,6 +189,16 @@ controllers.controller('ActivityController', ['$scope', 'ActivityType', function
         }
     }
 
+    $scope.closeModal = function() {
+        $scope.activity = {};
+        $('#activityModal').modal('hide');
+    }
+
+    $scope.save = function() {
+        $rootScope.resource.activities.push($scope.activity);
+        $scope.activity = {};
+        $('#activityModal').modal('hide');
+    }
 
 }])
 
