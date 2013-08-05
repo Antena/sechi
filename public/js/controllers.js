@@ -34,7 +34,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $rootScope.resource = {
         address: { lat: null, lng: null },
-        organizationTypes: $scope.organizationTypes,
+        organizationTypes: OrganizationType.load(),
         activities: []
     };
 
@@ -94,7 +94,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
         $http({method: 'PUT', url: '/resources', data:$scope.resource}).
             success(function (data, status, headers, config) {
-                console.log('submitted ok')
+                $location.path('/lista')
             }).
             error(function (data, status, headers, config) {
                 // called asynchronously if an error occurs
@@ -247,6 +247,7 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
 
     $scope.delete = function() {
         var activityId = $scope.activityToDelete;
+        console.log($rootScope.resource.activities);        //TODO(gb): Remove trace!!!
         $rootScope.resource.activities.splice(activityId, 1);
         for (var i=0; i<$rootScope.resource.activities.length; i++) {
             $rootScope.resource.activities[i].id = i;
