@@ -117,7 +117,10 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         organizationTypes: OrganizationType.load(),
         activities: [],
         state: 'state',
-        isState: function() { return this.state == 'state' }
+        isState: function() { return this.state == 'state' },
+        legalPersonality: 'no',
+        legalPersonalityInProcess: 'no',
+        resources: { physical: { bathroom: 'no' } }
     };
 
     var urls=$location.path().split('/');
