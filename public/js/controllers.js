@@ -78,7 +78,6 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
     }
     
     $scope.finish = function(){
-    	alert($scope.user.password);
     	$scope.user.password = CryptoJS.MD5($scope.user.password).toString();
     	$scope.user.oldpassword = CryptoJS.MD5($scope.user.oldPassword).toString();
     	$scope.user.passwordRepeat = CryptoJS.MD5($scope.user.passwordRepeat).toString();
