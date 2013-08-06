@@ -1,5 +1,177 @@
-<form>
+<form class="form-horizontal">
     <fieldset>
         <legend>Información adicional para organizaciones no estatales (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
+
+        <div class="form-group">
+            <label class="col-lg-3 col-offset-2 control-label">¿Tiene personería jurídica?</label>
+            <div class="col-lg-2" style="padding-top: 8px">
+                <label class="radio-inline">
+                    <input class="" type="radio" name="optionsLegalPersonality" ng-model="resource.legalPersonality" value="yes" ng-checked="resource.legalPersonality == 'yes'"/>
+                    Si
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadiosLegalPersonality" ng-model="resource.legalPersonality" value="no" ng-checked="resource.legalPersonality == 'no'" />
+                    No
+                </label>
+            </div>
+            <label class="col-lg-2 control-label">En trámite</label>
+            <div class="col-lg-2" style="padding-top: 8px">
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadios" ng-model="resource.legalPersonalityInProcess" value="yes" ng-checked="resource.legalPersonalityInProcess == 'yes'"/>
+                    Si
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadios" ng-model="resource.legalPersonalityInProcess" value="no" ng-checked="resource.legalPersonalityInProcess == 'no'"/>
+                    No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputIGJ" class="col-lg-2 control-label">IGJ</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputIGJ" placeholder="IGJ" ng-model="resource.igj">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputINAES" class="col-lg-2 control-label">INAES</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputINAES" placeholder="INAES" ng-model="resource.inaes">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label">CUIT</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputCUIT" placeholder="CUIT" ng-model="resource.inaes">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Recursos Materiales</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" placeholder="Informáticos" ng-model="resource.resources.material.informatic">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-offset-2">
+                <input type="text" class="form-control" placeholder="Maquinaria" ng-model="resource.resources.material.machinery">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-offset-2">
+                <input type="text" class="form-control" placeholder="Movilidad" ng-model="resource.resources.material.mobility">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-offset-2">
+                <input type="text" class="form-control" placeholder="Material Recreativo/Educativo" ng-model="resource.resources.material.educationalMaterial">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-offset-2">
+                <textarea class="form-control" rows="2" placeholder="Otros" ng-model="resource.resources.material.other"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Recursos Físicos</label>
+            <div class="col-lg-5">
+                <input type="text" class="form-control" placeholder="Cubierto" ng-model="resource.resources.physical.covered">
+            </div>
+            <div class="col-lg-5">
+                <input type="text" class="form-control" placeholder="Descubierto" ng-model="resource.resources.physical.uncovered">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-5 col-offset-2">
+                <input type="text" class="form-control" placeholder="Capacidad" ng-model="resource.resources.physical.capacity">
+            </div>
+            <label class="col-lg-1 control-label">Baño</label>
+            <div class="col-lg-3" style="padding-top: 8px">
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadios" ng-model="resource.resources.physical.bathroom" value="yes" ng-checked="resource.resources.physical.bathroom == 'yes'"/>
+                    Si
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadios" ng-model="resource.resources.physical.bathroom" value="no" ng-checked="resource.resources.physical.bathroom == 'no'"/>
+                    No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-offset-2">
+                <input type="text" class="form-control" placeholder="Accesibilidad para personas con discapacidad" ng-model="resource.resources.physical.pcd">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-offset-2">
+                <input type="text" class="form-control" placeholder="Accesibilidad de llegada al lugar. Describir, ej: No por lluvia, zona de riesgo, etc" ng-model="resource.resources.physical.accessibility">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-offset-2">
+                <input type="text" class="form-control" placeholder="Otros datos relevantes respecto al espacio" ng-model="resource.resources.physical.other">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Recursos Humanos</label>
+            <div class="col-lg-10" style="padding-top: 8px">
+                <label class="checkbox-inline">
+                    <input type="checkbox" ng-model="resource.resources.human.volunteers"> Voluntarios
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" ng-model="resource.resources.human.payed"> Pagos
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Fuente de financiamiento</label>
+            <div class="col-lg-4" style="padding-top: 8px">
+                <label class="checkbox-inline">
+                    <input type="checkbox" ng-model="resource.resources.funding.state"> Estatal
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" ng-model="resource.resources.funding.private"> Privado
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" ng-model="resource.resources.funding.civil"> Sociedad Civil
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" ng-model="resource.resources.funding.own"> Propio
+                </label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" class="form-control" placeholder="Nombre" ng-model="resource.resources.funding.name">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-4 col-offset-2">
+                <input type="text" class="form-control" placeholder="Monto" ng-model="resource.resources.funding.amount">
+            </div>
+            <div class="col-lg-6">
+                <input type="text" class="form-control" placeholder="En especies" ng-model="resource.resources.funding.species">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Cantidad de raciones</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" placeholder="Sólo para comedores" ng-model="resource.resources.funding.rations">
+            </div>
+        </div>
+
     </fieldset>
 </form>
