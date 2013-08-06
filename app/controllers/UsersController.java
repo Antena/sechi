@@ -19,12 +19,25 @@ import play.mvc.Result;
 public class UsersController extends Controller {
 
 	public static Result list() {
-		if(!isLoggedIn()){
+		if(!isLoggedIn("admin")){
 			return forbidden("no tiene permisos");
 		}
 		List<User> resources = User.getUsers();
 		JsonNode json = Json.toJson(resources);
 		return ok(json);
+	}
+	
+	static Boolean isLoggedIn(String role) {
+		if(session().get("email")==null){
+			return false;
+		}
+		
+		User user = User.findByEmail(session().get("email"));
+		if(user!=null && user.role.equals(role)){
+			return true;
+		}
+		
+		return false;
 	}
 
 	static Boolean isLoggedIn() {
@@ -32,7 +45,7 @@ public class UsersController extends Controller {
 	}
 
 	public static Result get(String id) {
-		if(!isLoggedIn()){
+		if(!isLoggedIn("admin")){
 			return forbidden("no tiene permisos");
 		}
 		
@@ -46,7 +59,7 @@ public class UsersController extends Controller {
 	}
 
 	public static Result insert() {
-		if(!isLoggedIn()){
+		if(!isLoggedIn("admin")){
 			return forbidden("no tiene permisos");
 		}
 		
@@ -66,18 +79,28 @@ public class UsersController extends Controller {
 	}
 
 	public static Result update() {
-		if(!isLoggedIn()){
+		if(!isLoggedIn("admin")){
 			return forbidden("no tiene permisos");
 		}
 		
 		JsonNode postData = request().body().asJson();
 		User user = Json.fromJson(postData, User.class);
+		//validate oldPassword
+		User oldUser = User.findByEmail(session().get("email"));
+		String oldPass = postData.get("oldPassword").asText();
+		if (!oldPass.equals(oldUser.password)) {
+			ObjectNode newObject = Json.newObject();
+			newObject.put("error", 1);
+			newObject.put("message", "Wrong password");
+			return forbidden(newObject);
+		}
+		
 		User.update(user);
 		return ok();
 	}
 
 	public static Result delete(String id) {
-		if(!isLoggedIn()){
+		if(!isLoggedIn("admin")){
 			return forbidden("no tiene permisos");
 		}
 		User.remove(id);

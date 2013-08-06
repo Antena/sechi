@@ -51,11 +51,6 @@ public class Application extends Controller {
 	 * Handle login form submission.
 	 */
 	public static Result authenticate() {
-		try{
-			MessageDigest m = MessageDigest.getInstance("MD5");
-		}catch (Exception e) {
-			Logger.info("error on md5 hash");
-		}
 
 		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 		if (loginForm.hasErrors()) {

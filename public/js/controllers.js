@@ -51,6 +51,9 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
     $scope.user={};
     $scope.editing=false;
     
+    $scope.role={};
+    $scope.roles=[{name:"Administrador",value:"admin"},{name:"Encuestador",value:"normal"}]
+    
     var urls=$location.path().split('/');
     if(urls.length==3) {
     	$scope.editing=true;
@@ -62,6 +65,11 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
                 $rootScope.page = 'addUser';
                 $scope.user = data;
                 $scope.user.password="";
+                $scope.role = $scope.roles.filter(function(r){
+                	console.log($scope.user.role);
+                	return r.value==$scope.user.role;
+                })[0];
+                console.log($scope.role);
             }).
             error(function (data, status, headers, config) {
                 // called asynchronously if an error occurs
@@ -70,6 +78,11 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
     }
     
     $scope.finish = function(){
+    	alert($scope.user.password);
+    	$scope.user.password = CryptoJS.MD5($scope.user.password).toString();
+    	$scope.user.oldpassword = CryptoJS.MD5($scope.user.oldPassword).toString();
+    	$scope.user.passwordRepeat = CryptoJS.MD5($scope.user.passwordRepeat).toString();
+    	$scope.user.role=$scope.role.value;
     	if($scope.editing){
     		$scope.update();
     	}else{
