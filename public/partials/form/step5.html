@@ -1,5 +1,50 @@
-<form>
+<form class="form-horizontal">
+    <div class="well">
+        {{ resource }}
+    </div>
     <fieldset>
         <legend>Información adicional para organizaciones no estatales (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">¿Tiene personería jurídica?</label>
+            <div class="col-lg-2" style="padding-top: 8px">
+                <label class="radio-inline">
+                    <input class="" type="radio" name="optionsLegalPersonality" ng-model="resource.legalPersonality" value="yes" ng-checked="resource.legalPersonality == 'yes'"/>
+                    Si
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadiosLegalPersonality" ng-model="resource.legalPersonality" value="no" ng-checked="resource.legalPersonality == 'no'" />
+                    No
+                </label>
+            </div>
+            <label class="col-lg-2 control-label">En trámite</label>
+            <div class="col-lg-2" style="padding-top: 8px">
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadios" ng-model="resource.legalPersonalityInProcess" value="yes" ng-checked="resource.legalPersonalityInProcess == 'yes'"/>
+                    Si
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsRadios" ng-model="resource.legalPersonalityInProcess" value="no" ng-checked="resource.legalPersonalityInProcess == 'no'"/>
+                    No
+                </label>
+            </div>
+        </div>
+        <div class="from-group">
+            <label for="inputIGJ" class="col-lg-2 control-label">IGJ</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputIGJ" placeholder="IGJ" ng-model="resource.igj">
+            </div>
+        </div>
+        <div class="from-group">
+            <label for="inputINAES" class="col-lg-2 control-label">INAES</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputINAES" placeholder="INAES" ng-model="resource.inaes">
+            </div>
+        </div>
+        <div class="from-group">
+            <label for="inputCUIT" class="col-lg-2 control-label">CUIT</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputCUIT" placeholder="CUIT" ng-model="resource.inaes">
+            </div>
+        </div>
     </fieldset>
 </form>

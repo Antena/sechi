@@ -39,7 +39,9 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         organizationTypes: OrganizationType.load(),
         activities: [],
         state: 'state',
-        isState: function() { return this.state == 'state' }
+        isState: function() { return this.state == 'state' },
+        legalPersonality: 'no',
+        legalPersonalityInProcess: 'no'
     };
 
     var urls=$location.path().split('/');
@@ -62,7 +64,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.steps = [
-        { step: 0, title: "Ficha", template:"assets/partials/form/step0.html", completed: false, active: function() { return true } },
+        { step: 0, title: "Ficha", template:"assets/partials/form/step5.html", completed: false, active: function() { return true } },
         { step: 1, title: "Organización", template:"assets/partials/form/step1.html", completed: false, active: function() { return true } },
         { step: 2, title: "Ubicación", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()", active: function() { return true } },
         { step: 3, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false, active: function() { return true } },
