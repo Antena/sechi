@@ -2,8 +2,10 @@
     <div class="row">
         <div class="col-lg-12">
             <ul class="nav nav-pills">
-                <li ng-class="{active: currentStep == step.step, disabled: !step.completed && $index > currentStep}" ng-repeat="step in steps">
-                    <a href="#" ng-click="goto($index)" prevent-click><span class="label" ng-class="{'label-success': step.completed, 'label-warning': $index == currentStep}">{{ $index + 1 }}</span> {{ step.title }}</a>
+                <li ng-class="{active: currentStep == step.step, disabled: !step.completed && $index > currentStep}" ng-repeat="step in steps" ng-show="step.active()">
+                    <a href="#" ng-click="goto($index)" prevent-click>
+                        <span class="label" ng-class="{'label-success': step.completed, 'label-warning': $index == currentStep}">{{ $index + 1 }}</span> {{ step.title }}
+                    </a>
                 </li>
             </ul>
         </div>
@@ -11,7 +13,7 @@
     <div class="row" ng-hide="resource._id">
         <div class="col-12 status">
             <div class="progress progress-striped active">
-                <div class="progress-bar" style="width: {{ completed / steps.length * 100 }}%"></div>
+                <div class="progress-bar" style="width: {{ completed / stepslength() * 100 }}%"></div>
             </div>
         </div>
     </div>

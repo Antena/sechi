@@ -1,13 +1,13 @@
 <form ng-controller="ActivityController">
     <fieldset>
-        <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
+        <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
         <div class="alert alert-info" ng-show="resource.activities.length == 0">
             Aún no hay actividades agregadas para este recurso. <a href="#activityModal" class="btn btn-default btn-small" ng-click="newActivity()" prevent-click>Agregar nueva actividad</a>
         </div>
         <table class="table table-striped" ng-show="resource.activities.length > 0">
             <thead>
             <tr>
-                <th>Actividad</th>
+                <th style="text-align: center">Actividad</th>
                 <th>Descripción</th>
                 <th>Género</th>
                 <th>Cupo</th>
@@ -20,7 +20,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="a in resource.activities">
-                <td><a href="#" data-toggle="tooltip" title="" data-original-title="{{ a.code | activityName }}" data-placement="right" tooltip prevent-click>{{ a.code }}</a></td>
+                <td style="text-align: center"><a href="#" data-toggle="tooltip" title="" data-original-title="{{ a.code | activityName }}" data-placement="right" tooltip prevent-click>{{ a.code }}</a></td>
                 <td>{{ a.description | truncate:35 }}</td>
                 <td>{{ a.gender }}</td>
                 <td>{{ a.quota }}</td>
@@ -37,8 +37,8 @@
         </table>
 
         <div class="form-group" style="margin-top: 15px">
-            <label for="inputFunction" class="col-lg-1 control-label" style="text-align: right">Función</label>
-            <div class="col-lg-11">
+            <label for="inputFunction" class="col-lg-12 control-label">Función</label>
+            <div class="col-lg-12">
                 <textarea class="form-control" rows="3" id="inputFunction" placeholder="Describa la función de la organización" ng-model="resource.function"></textarea>
             </div>
         </div>

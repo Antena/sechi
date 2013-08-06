@@ -35,8 +35,11 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $rootScope.resource = {
         address: { lat: null, lng: null },
+        organizationType: 'state',
         organizationTypes: OrganizationType.load(),
-        activities: []
+        activities: [],
+        state: 'state',
+        isState: function() { return this.state == 'state' }
     };
 
     var urls=$location.path().split('/');
@@ -46,6 +49,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             success(function (data, status, headers, config) {
                 $rootScope.page = 'resource';
                 $rootScope.resource = data;
+                $rootScope.resource.isState = function() { return this.state == 'state' }
                 $rootScope.resource._id = $rootScope.resource._id.$oid;
                 $scope.steps.map(function(step) {
                     step.completed = true;
@@ -58,13 +62,17 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.steps = [
-        { step: 0, title: "Ficha", template:"assets/partials/form/step0.html", completed: false },
-        { step: 1, title: "Organización", template:"assets/partials/form/step1.html", completed: false },
-        { step: 2, title: "Ubicación", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()" },
-        { step: 3, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false },
-        { step: 4, title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false },
-        { step: 5, title: "Información adicional", template:"assets/partials/form/step5.html", completed: false }
+        { step: 0, title: "Ficha", template:"assets/partials/form/step0.html", completed: false, active: function() { return true } },
+        { step: 1, title: "Organización", template:"assets/partials/form/step1.html", completed: false, active: function() { return true } },
+        { step: 2, title: "Ubicación", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()", active: function() { return true } },
+        { step: 3, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false, active: function() { return true } },
+        { step: 4, title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false, active: function() { return true } },
+        { step: 5, title: "Información adicional", template:"assets/partials/form/step5.html", completed: false, active: function() { return !$rootScope.resource.isState() } }
     ];
+
+    $scope.stepslength = function() {
+        return $scope.steps.filter(function(step) { return step.active() }).length;
+    }
 
     $scope.currentStep = 0;
     $scope.completed = 0;
@@ -127,7 +135,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     $scope.initMap = function() {
         if (!$scope.mapLoaded) {
             setTimeout(function() {
-                console.log("loadmap");        //TODO(gb): Remove trace!!!
                 var mapOptions = {
                     center: new google.maps.LatLng(-34.63123, -58.441772),
                     zoom: 11,
@@ -285,7 +292,6 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
 
     $scope.setActivityToDelete = function(activityId) {
         $scope.activityToDelete = activityId;
-        console.log("$scope.activityToDelete= " + $scope.activityToDelete);     //TODO(gb): Remove trace!!!
     }
 
     $scope.delete = function() {

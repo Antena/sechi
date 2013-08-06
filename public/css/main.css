@@ -34,3 +34,7 @@
     text-align: center;
     border-top: 1px solid #e5e5e5;
 }
+
+.nav .nav-pills li.required {
+    opacity: 0.8;
+}
