@@ -1,0 +1,51 @@
+<div class="container">
+	<form class="form-horizontal">
+		<fieldset>
+			<legend>Registro de Usuario</legend>
+			<div class="form-group">
+				<label for="inputName" class="col-lg-2 control-label">Nombre</label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="inputName"
+						placeholder="Nombre completo" ng-model="user.name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail" class="col-lg-2 control-label">Email</label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="inputFantasyName"
+						placeholder="Email" ng-model="user.email">
+				</div>
+			</div>
+			<div class="form-group" ng-hide="!editing">
+				<label for="inputOldPassword" class="col-lg-2 control-label">Password anterior</label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="inputOldPassword"
+						placeholder="Password anterior" ng-model="user.oldPassword">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputPassword" class="col-lg-2 control-label">Password</label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="inputPassword"
+						placeholder="Password" ng-model="user.password">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputPassword" class="col-lg-2 control-label"></label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="inputPassword"
+						placeholder="Repetir password" ng-model="user.passwordRepeat">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputRole" class="col-lg-2 control-label">Rol</label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="inputRole"
+						placeholder="Rol" ng-model="user.role">
+				</div>
+			</div>
+
+		    <button type="submit" class="btn btn-default" ng-click="finish()">Agregar</button>
+		</fieldset>
+	</form>
+</div>

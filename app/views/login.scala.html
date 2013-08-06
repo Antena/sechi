@@ -1,0 +1,52 @@
+@(loginForm: Form[Application.Login])
+
+<html>
+<head>
+<title>Portal de estudios - Centro de Diagnóstico Dr. Enrique
+	Rossi</title>
+<meta charset="utf-8">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("css/bootstrap.min.css")">
+<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+</head>
+<body>
+
+	<div class="container">
+	<h3>Sechi</h3>
+		<div class="form-horizontal ">
+			@helper.form(action = routes.Application.authenticate()) {
+			<fieldset>
+
+				@if(loginForm.hasGlobalErrors) {
+				<div class="alert alert-error">@loginForm.globalError.message</div>
+				} @if(flash.contains("success")) {
+				<div class="alert">@flash.get("success")</div>
+				}
+
+				<div class="form-group">
+					<label class="control-label" for="email">Email</label>
+					<div class="controls">
+						<input type="text" id="email" name="email">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label" for="password">Contraseña</label>
+					<div class="controls">
+						<input type="password" id="password" name="password">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="controls">
+						<button type="submit" class="btn btn-default">Ingresar</button>
+					</div>
+				</div>
+
+			</fieldset>
+			}
+		</div>
+	</div>
+
+
+</body>
+</html>

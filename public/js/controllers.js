@@ -27,6 +27,84 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
 
 }])
 
+controllers.controller('UsersController', ['$scope', '$rootScope','$http', function($scope, $rootScope,$http) {
+    $rootScope.page = 'list';
+    $http({method: 'GET', url: '/users'}).
+        success(function (data, status, headers, config) {
+            data.map(function (d) {
+            	console.log(d);
+            });
+            $rootScope.users = data;
+            console.log(data);
+
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
+
+
+}])
+
+controllers.controller('addUserController', ['$scope', '$rootScope','$http','$location', function($scope, $rootScope,$http,$location) {
+    $rootScope.page = 'addUser';
+    $scope.user={};
+    $scope.editing=false;
+    
+    var urls=$location.path().split('/');
+    if(urls.length==3) {
+    	$scope.editing=true;
+    	console.log($scope.editing);
+        var id = urls[urls.length-1];
+        $http({method: 'GET', url: '/users/'+id}).
+            success(function (data, status, headers, config) {
+            	$scope.oldUser=data;
+                $rootScope.page = 'addUser';
+                $scope.user = data;
+                $scope.user.password="";
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+    }
+    
+    $scope.finish = function(){
+    	if($scope.editing){
+    		$scope.update();
+    	}else{
+    		$scope.save();
+    	}
+    }
+       
+    $scope.save = function() {
+    	console.log($scope.user);
+    	postData=$.extend({},$scope.user);
+        $http({method: 'PUT', url: '/users', data:postData}).
+            success(function (data, status, headers, config) {
+                $location.path('/users')
+            }).
+            error(function (data, status, headers, config) {
+            	console.log(data);
+            });
+    }
+    
+    $scope.update = function() {
+    	postData=$.extend({},$scope.user);
+        $http({method: 'POST', url: '/users', data:postData}).
+            success(function (data, status, headers, config) {
+                $location.path('/users')
+            }).
+            error(function (data, status, headers, config) {
+            	console.log(data);
+            });
+    }
+    
+    
+
+
+}])
+
 
 controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'OrganizationType','$http','$location', function($scope, $rootScope, OrganizationType,$http,$location) {
     $rootScope.page = 'resource';

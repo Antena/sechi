@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row">
+        <h1>Usuarios</h1>
+        <table class="table table-striped">
+            <thead>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Fecha de comienzo</th>
+                <th>Rol</th>
+                <th></th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="r in users">
+                <td>{{r.name}}</td>
+                <td>{{r.email}}</td>
+                <td>{{r.registrationDate}}</td>
+                <td>{{r.role}}</td>
+                <td></td>
+                <td><a href="/#/users/{{r.id}}">Ver</a></td>
+            </tr>
+            <tbody/>
+        </table>
+
+    </div>
+</div>
+</html>

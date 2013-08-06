@@ -21,6 +21,9 @@ import com.mongodb.DBObject;
 public class ResourcesController extends Controller {
 
 	public static Result list() {
+		if(!UsersController.isLoggedIn()){
+			return forbidden("no tiene permisos");
+		}
 		ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
 		List<DBObject> resources = Resource.getResources();
 
@@ -33,6 +36,9 @@ public class ResourcesController extends Controller {
 	}
 
 	public static Result get(String id) {
+		if(!UsersController.isLoggedIn()){
+			return forbidden("no tiene permisos");
+		}
 		DBObject resource = Resource.findById(id);
 		if (resource == null) {
 			return notFound();
@@ -43,18 +49,27 @@ public class ResourcesController extends Controller {
 	}
 
 	public static Result insert() {
+		if(!UsersController.isLoggedIn()){
+			return forbidden("no tiene permisos");
+		}
 		JsonNode postData = request().body().asJson();
 		Resource.save(postData);
 		return ok();
 	}
 
 	public static Result update() {
+		if(!UsersController.isLoggedIn()){
+			return forbidden("no tiene permisos");
+		}
 		JsonNode postData = request().body().asJson();
 		Resource.update(postData);
 		return ok();
 	}
 
 	public static Result delete(String id) {
+		if(!UsersController.isLoggedIn()){
+			return forbidden("no tiene permisos");
+		}
 		Resource.remove(id);
 		return ok();
 	}
