@@ -1,5 +1,32 @@
 var services = angular.module('sechi.services', []);
 
+services.factory('Settlement', function() {
+    return [
+        'Asentamiento Morixe',
+        'Bajo AU7',
+        'Calacita',
+        'Carrilo 2',
+        'Fraga 900',
+        'Piletones',
+        'Villa 1-11-14',
+        'Villa 3',
+        'Villa 6',
+        'Villa 13 Bis',
+        'Villa 16',
+        'Villa 17',
+        'Villa 15',
+        'Villa 19',
+        'Villa 20',
+        'Villa 21-24',
+        'Villa 26',
+        'Villa 31',
+        'Villa 31 Bis',
+        'Villa Dulce',
+        'Villa Rodrigo Bueno',
+        'Zavaleta'
+    ]
+})
+
 services.factory('OrganizationType', [function() {
     return {
         load: function() {

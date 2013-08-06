@@ -1,42 +1,58 @@
 <form>
     <fieldset>
-        <legend>Tipo de la organización (Paso {{ currentStep+1 }} de {{ steps.length }})</legend>
+        <legend>Tipo de la organización (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Tipo de organización</label>
+                <div class="col-lg-10">
+                    <label class="radio-inline">
+                        <input type="radio" name="optionsRadios" ng-model="resource.state" value="state" ng-checked="resource.isState()"/>
+                        Estatal
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="optionsRadios" ng-model="resource.state" value="nonstate"/>
+                        No estatal
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-6">
-            <h4>{{ 'Estatal' | uppercase }}</h4>
+            <h4 ng-class="{ 'text-muted': !resource.isState() }">{{ 'Estatal' | uppercase }}</h4>
             <hr/>
             <div class="checkbox col-lg-6" ng-repeat="type in resource.organizationTypes.State" style="margin-top: -5px;">
-                <label>
-                    <input type="checkbox" value="" ng-model="type.checked">
+                <label ng-class="{ 'text-muted': !resource.isState() }">
+                    <input type="checkbox" value="" ng-model="type.checked" ng-disabled="!resource.isState()">
                     {{ type.label }}
                 </label>
             </div>
             <div class="checkbox col-lg-1" style="margin-top: -5px;">
-                <label>
-                    <input type="checkbox" value="" ng-checked="resource.organizationTypes.StateOther">
+                <label ng-class="{ 'text-muted': !resource.isState() }">
+                    <input type="checkbox" value="" ng-checked="resource.organizationTypes.StateOther"  ng-disabled="!resource.isState()">
                     Otra
                 </label>
             </div>
             <div class="checkbox col-lg-5">
-                <input type="text" class="form-control input-inline" ng-model="resource.organizationTypes.StateOther">
+                <input type="text" class="form-control input-inline" ng-model="resource.organizationTypes.StateOther" ng-disabled="!resource.isState()">
             </div>
         </div>
         <div class="col-lg-6">
-            <h4>{{ 'No Estatal' | uppercase }}</h4>
+            <h4 ng-class="{ 'text-muted': resource.isState() }">{{ 'No Estatal' | uppercase }}</h4>
             <hr/>
             <div class="checkbox col-lg-6" ng-repeat="type in resource.organizationTypes.NonState" style="margin-top: -5px;">
-                <label>
-                    <input type="checkbox" value="" ng-model="type.checked">
+                <label ng-class="{ 'text-muted': resource.isState() }">
+                    <input type="checkbox" value="" ng-model="type.checked" ng-disabled="resource.isState()">
                     {{ type.label }}
                 </label>
             </div>
             <div class="checkbox col-lg-1" style="margin-top: -5px;">
-                <label>
-                    <input type="checkbox" value="" ng-checked="resource.organizationTypes.NonStateOther">
+                <label ng-class="{ 'text-muted': resource.isState() }">
+                    <input type="checkbox" value="" ng-checked="resource.organizationTypes.NonStateOther" ng-disabled="resource.isState()">
                     Otra
                 </label>
             </div>
             <div class="checkbox col-lg-5">
-                <input type="text" class="form-control input-inline" ng-model="resource.organizationTypes.NonStateOther">
+                <input type="text" class="form-control input-inline" ng-model="resource.organizationTypes.NonStateOther" ng-disabled="resource.isState()">
             </div>
         </div>
     </fieldset>
