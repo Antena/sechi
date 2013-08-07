@@ -126,13 +126,21 @@
 
         <div class="form-group">
             <label class="col-lg-2 control-label">Recursos Humanos</label>
-            <div class="col-lg-10" style="padding-top: 8px">
+            <div class="col-lg-1" style="padding-top: 8px">
                 <label class="checkbox-inline">
                     <input type="checkbox" ng-model="resource.resources.human.volunteers"> Voluntarios
                 </label>
+            </div>
+            <div class="col-lg-1">
+                <input type="text" class="form-control" placeholder="Cantidad" ng-model="resource.resources.human.volunteersNumbers" ng-disabled="!resource.resources.human.volunteers">
+            </div>
+            <div class="col-lg-1 col-offset-2" style="padding-top: 8px">
                 <label class="checkbox-inline">
                     <input type="checkbox" ng-model="resource.resources.human.payed"> Pagos
                 </label>
+            </div>
+            <div class="col-lg-1">
+                <input type="text" class="form-control" placeholder="Cantidad" ng-model="resource.resources.human.payedNumbers" ng-disabled="!resource.resources.human.payed">
             </div>
         </div>
 

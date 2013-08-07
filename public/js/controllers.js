@@ -267,7 +267,18 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         }
     }
 
-    $scope.update = function(e) {
+    $scope.update = function(e, form) {
+
+        if (form.$invalid) {
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
+
         var elem = angular.element(e.toElement);
         $(elem).button('loading');
         $http({method: 'PUT', url: '/resources', data:$rootScope.resource}).
@@ -280,7 +291,17 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             });
     }
 
-    $scope.finish = function(e) {
+    $scope.finish = function(e, form) {
+        if (form.$invalid) {
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
+
         var elem = angular.element(e.toElement);
         $(elem).button('loading');
         $(".progress-bar").animate({
