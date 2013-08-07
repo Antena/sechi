@@ -113,7 +113,7 @@ services.factory('ActivityType', [function() {
             {code: 37, topic: "Cultura", name: "Medios de comunicación barriales (radios y diarios del barrio)"},
             {code: 38, topic: "Cultura", name: "Bibliotecas y rincones de lectura"},
             {code: 39, topic: "Cultura", name: "Festivales y fiestas barriales"},
-            {code: 40, topic: "Cultura", name: "Bibliotecas y rincones de lectura"},
+            {code: 40, topic: "Cultura", name: "Danza"},
             {code: 41, topic: "Cultura", name: "Programas y talleres culturales en el barrio de Artes Escénicas"},
             {code: 42, topic: "Cultura", name: "Programas y talleres culturales en el barrio de Artes Plásticas/Manualidades"},
             {code: 43, topic: "Cultura", name: "Programas y talleres culturales en el barrio de Audiovisual"},
