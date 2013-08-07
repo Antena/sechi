@@ -19,7 +19,7 @@
                 <td>{{ r.name }}</td>
                 <td>{{ r.date | date:'dd/MM/yyyy' }}</td>
                 <td>bla</td>
-                <td>Entrevistado</td>
+                <td>{{ r.interviewee.name }} {{ r.interviewee.surname }}</td>
                 <td></td>
                 <td><a href="/#/recurso/{{r.id}}">Ver</a></td>
             </tr>
