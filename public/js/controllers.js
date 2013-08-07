@@ -5,8 +5,43 @@ controllers.controller('AppController', ['$rootScope', function($rootScope) {
 
 }])
 
-controllers.controller('MapController', ['$scope', '$rootScope', function($scope, $rootScope) {
+controllers.controller('MapController', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
     $rootScope.page = 'map';
+
+    var mapOptions = {
+        center: new google.maps.LatLng(-34.63123, -58.441772),
+        zoom: 11,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    $http({method: 'GET', url: '/resources'}).
+        success(function (data, status, headers, config) {
+            data.map(function(resource) {
+
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(resource.address.lat, resource.address.lng),
+                    map: $scope.map
+                })
+
+                var content =
+                    "<p><strong>" + resource.name + "</strong></p>"
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open($scope.map,marker);
+                });
+            })
+
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
+
 }])
 
 controllers.controller('ResourceListController', ['$scope', '$rootScope','$http', function($scope, $rootScope,$http) {
