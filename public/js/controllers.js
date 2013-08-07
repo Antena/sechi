@@ -157,7 +157,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.currentStep = 0;
     $scope.completed = 0;
-    $scope.$forminvalid = false;
     $scope.$formunchanged = true;
 
     $scope.next = function(form) {
@@ -165,7 +164,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
         $scope.form = form;
 
         if (form.$invalid) {
-            $scope.$forminvalid = form.$invalid
             $scope.$formunchanged = false;
             for (key in form) {
                 if (key.indexOf("$") < 0) {
@@ -184,8 +182,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             eval($scope.steps[$scope.currentStep].onload);
         }
 
-        $scope.$forminvalid = false;
-        $scope.$processingvalidation = false;
+        $scope.$formunchanged = true;
     }
 
     $scope.prev = function() {
