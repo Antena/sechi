@@ -57,7 +57,7 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
     var urls=$location.path().split('/');
     if(urls.length==3) {
     	$scope.editing=true;
-    	console.log($scope.editing);
+    	
         var id = urls[urls.length-1];
         $http({method: 'GET', url: '/users/'+id}).
             success(function (data, status, headers, config) {
@@ -78,20 +78,20 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
     }
     
     $scope.finish = function(){
-    	$scope.user.password = CryptoJS.MD5($scope.user.password).toString();
-    	$scope.user.oldpassword = CryptoJS.MD5($scope.user.oldPassword).toString();
-    	$scope.user.passwordRepeat = CryptoJS.MD5($scope.user.passwordRepeat).toString();
-    	$scope.user.role=$scope.role.value;
+    	var postData=$.extend({},$scope.user);
+    	postData.password = CryptoJS.MD5($scope.user.password).toString();
+    	postData.oldPassword = CryptoJS.MD5($scope.user.oldPassword).toString();
+    	postData.passwordRepeat = CryptoJS.MD5($scope.user.passwordRepeat).toString();
+    	postData.role=$scope.role.value;
     	if($scope.editing){
-    		$scope.update();
+    		$scope.update(postData);
     	}else{
-    		$scope.save();
+    		$scope.save(postData);
     	}
     }
        
-    $scope.save = function() {
-    	console.log($scope.user);
-    	postData=$.extend({},$scope.user);
+    $scope.save = function(postData) {
+    	
         $http({method: 'PUT', url: '/users', data:postData}).
             success(function (data, status, headers, config) {
                 $location.path('/users')
@@ -101,8 +101,8 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
             });
     }
     
-    $scope.update = function() {
-    	postData=$.extend({},$scope.user);
+    $scope.update = function(postData) {
+    	
         $http({method: 'POST', url: '/users', data:postData}).
             success(function (data, status, headers, config) {
                 $location.path('/users')
