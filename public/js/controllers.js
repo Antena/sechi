@@ -13,7 +13,6 @@ controllers.controller('AppController', ['$rootScope','$http', function($rootSco
 
 controllers.controller('MapController', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
     $rootScope.page = 'map';
-    
 
     var mapOptions = {
         center: new google.maps.LatLng(-34.63123, -58.441772),
@@ -22,6 +21,8 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
     };
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+    $scope.infoWindow = new google.maps.InfoWindow({});
+
     $http({method: 'GET', url: '/resources'}).
         success(function (data, status, headers, config) {
         	data=data.filter(function(d){
@@ -29,21 +30,21 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
         	});
         	
             data.map(function(resource) {
+                resource._id = resource._id.$oid;
 
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(resource.address.lat, resource.address.lng),
                     map: $scope.map
                 })
 
-                var content =
-                    "<p><strong>" + resource.name + "</strong></p>"
-
-                var infowindow = new google.maps.InfoWindow({
-                    content: content
-                });
+                var content = "<p><strong>" + resource.name + "</strong></p>";
+                if ($rootScope.user.id == resource.user.id || $rootScope.user.role == "admin") {
+                    content += '<p><a href="/#/recurso/' + resource._id + '">Editar</a></p>'
+                }
 
                 google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open($scope.map,marker);
+                    $scope.infoWindow.setContent(content);
+                    $scope.infoWindow.open($scope.map, marker);
                 });
             })
 
@@ -63,7 +64,9 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
                 d._id = d._id.$oid;
                 return d;
             });
-            $rootScope.resources = data;
+            $rootScope.resources = data.filter(function(resource) {
+                return resource.user.id == $rootScope.user.id || $rootScope.user.role == "admin";
+            });
 
         }).
         error(function (data, status, headers, config) {
@@ -179,7 +182,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $rootScope.resource = {
     	user: $rootScope.user,
-    	active:false,
+    	active: true,
         address: { lat: null, lng: null },
         organizationType: 'state',
         organizationTypes: OrganizationType.load(),
