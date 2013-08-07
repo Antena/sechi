@@ -15,8 +15,8 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
     $rootScope.page = 'map';
 
     var mapOptions = {
-        center: new google.maps.LatLng(-34.63123, -58.441772),
-        zoom: 11,
+        center: new google.maps.LatLng(-34.62, -58.441772),
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
@@ -37,7 +37,8 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
                     map: $scope.map
                 })
 
-                var content = "<p><strong>" + resource.name + "</strong></p>";
+                var content = '<p class="settlement">' + resource.settlement + '</p>';
+                content += "<p><strong>" + resource.name + "</strong></p>";
                 if ($rootScope.user.id == resource.user.id || $rootScope.user.role == "admin") {
                     content += '<p><a href="/#/recurso/' + resource._id + '">Editar</a></p>'
                 }
