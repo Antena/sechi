@@ -197,11 +197,18 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.prev = function() {
         $scope.currentStep--;
+        if ($scope.steps[$scope.currentStep].onload) {
+            eval($scope.steps[$scope.currentStep].onload);
+        }
     }
 
     $scope.goto = function(index) {
-        if ($scope.steps[index].completed)
+        if ($scope.steps[index].completed) {
             $scope.currentStep = index;
+            if ($scope.steps[$scope.currentStep].onload) {
+                eval($scope.steps[$scope.currentStep].onload);
+            }
+        }
     }
 
     $scope.update = function(e) {
@@ -239,6 +246,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.initMap = function() {
+        console.log("loaded");        //TODO(gb): Remove trace!!!
         if (!$scope.mapLoaded) {
             setTimeout(function() {
                 var mapOptions = {
