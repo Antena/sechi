@@ -161,8 +161,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.next = function(form) {
 
-        $scope.form = form;
-
         if (form.$invalid) {
             $scope.$formunchanged = false;
             for (key in form) {
@@ -350,6 +348,8 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $scope.activity.code = type.code;
     }
 
+    $scope.$formunchanged = true;
+
     $scope.codeEntered = function() {
         var filteredType = $scope.activityTypes.types.filter(function (type) {
             return type.code == parseInt($scope.activity.code);
@@ -400,13 +400,33 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $('#deleteModal').modal('hide');
     }
 
-    $scope.save = function() {
+    $scope.save = function(form) {
+        if (form.$invalid) {
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
+
+        $scope.$formunchanged = true;
         $scope.activity.id = $rootScope.resource.activities.length;
         $rootScope.resource.activities.push($scope.activity);
         $scope.closeModal();
     }
 
-    $scope.update = function(activityId) {
+    $scope.update = function(activityId, form) {
+        if (form.$invalid) {
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
         $rootScope.resource.activities[activityId] = $scope.activity;
         $scope.closeModal();
     }
