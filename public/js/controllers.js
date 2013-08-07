@@ -562,7 +562,7 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
     }
 
     $scope.save = function(form) {
-        if (form.$invalid) {
+        if (form.$invalid && form.$error.required && form.$error.required[0].$name != "inputFunction") {
             $scope.$formunchanged = false;
             for (key in form) {
                 if (key.indexOf("$") < 0) {
