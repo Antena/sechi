@@ -1,21 +1,25 @@
-<form class="form-horizontal">
+<form class="form-horizontal" name="form">
     <fieldset>
         <legend>Datos de la ficha (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
         <div class="form-group">
             <label for="inputSettlement" class="col-lg-2 control-label">Barrio / Villa / Complejo</label>
-            <div class="col-lg-10">
-                <select class="form-control" ng-model="resource.settlement">
+            <div class="col-lg-10" ng-class="{'has-error': form.selectSettlement.$dirty && form.selectSettlement.$invalid}">
+                <select class="form-control" ng-model="resource.settlement" name="selectSettlement" required>
                     <option ng-repeat="set in settlements" value="{{ set }}" ng-selected="resource.settlement == set">{{ set }}</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <label for="inputInterviewee" class="col-lg-2 control-label">Nombre del entrevistado</label>
-            <div class="col-lg-4">
-                <input type="text" class="form-control" id="inputInterviewee" placeholder="Nombre" ng-model="resource.interviewee.name">
+            <div class="col-lg-4" ng-class="{'has-error': form.inputInterviewee.$dirty && form.inputInterviewee.$invalid}">
+                <input type="text" class="form-control"
+                       id="inputInterviewee" name="inputInterviewee" placeholder="Nombre"
+                       ng-model="resource.interviewee.name" required>
             </div>
-            <div class="col-lg-4">
-                <input type="text" class="form-control" id="inputIntervieweeSurname" placeholder="Apellido" ng-model="resource.interviewee.surname">
+            <div class="col-lg-4" ng-class="{'has-error': form.inputIntervieweeSurname.$dirty && form.inputIntervieweeSurname.$invalid}">
+                <input type="text" class="form-control"
+                       id="inputIntervieweeSurname" name="inputIntervieweeSurname" placeholder="Apellido"
+                       ng-model="resource.interviewee.surname" required>
             </div>
             <div class="col-lg-2">
                 <input type="text" class="form-control" id="inputIntervieweeTitle" placeholder="Cargo" ng-model="resource.interviewee.title">

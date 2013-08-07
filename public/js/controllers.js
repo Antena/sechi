@@ -143,12 +143,12 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.steps = [
-        { step: 0, title: "Ficha", template:"assets/partials/form/step0.html", completed: false, active: function() { return true } },
-        { step: 1, title: "Organización", template:"assets/partials/form/step1.html", completed: false, active: function() { return true } },
-        { step: 2, title: "Ubicación", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()", active: function() { return true } },
-        { step: 3, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false, active: function() { return true } },
-        { step: 4, title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false, active: function() { return true } },
-        { step: 5, title: "Información adicional", template:"assets/partials/form/step5.html", completed: false, active: function() { return !$rootScope.resource.isState() } }
+        { step: 0, name:'step0', title: "Ficha", template:"assets/partials/form/step0.html", completed: false, active: function() { return true } },
+        { step: 1, name:'step1', title: "Organización", template:"assets/partials/form/step1.html", completed: false, active: function() { return true } },
+        { step: 2, name:'step2', title: "Ubicación", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()", active: function() { return true } },
+        { step: 3, name:'step3', title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false, active: function() { return true } },
+        { step: 4, name:'step4', title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false, active: function() { return true } },
+        { step: 5, name:'step5', title: "Información adicional", template:"assets/partials/form/step5.html", completed: false, active: function() { return !$rootScope.resource.isState() } }
     ];
 
     $scope.stepslength = function() {
@@ -157,8 +157,24 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.currentStep = 0;
     $scope.completed = 0;
+    $scope.$forminvalid = false;
+    $scope.$formunchanged = true;
 
-    $scope.next = function() {
+    $scope.next = function(form) {
+
+        $scope.form = form;
+
+        if (form.$invalid) {
+            $scope.$forminvalid = form.$invalid
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
+
         if (!$scope.steps[$scope.currentStep].completed) {
             $scope.steps[$scope.currentStep].completed = true;
             $scope.completed++;
@@ -168,6 +184,8 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             eval($scope.steps[$scope.currentStep].onload);
         }
 
+        $scope.$forminvalid = false;
+        $scope.$processingvalidation = false;
     }
 
     $scope.prev = function() {
