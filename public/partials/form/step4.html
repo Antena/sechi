@@ -154,7 +154,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn" ng-click="closeModal()" prevent-click>Cancelar</a>
+                    <a href="#" class="btn" ng-click="closeModal(form)" prevent-click>Cancelar</a>
                     <a href="#" class="btn btn-primary" ng-click="save(form)" ng-hide="editing" ng-disabled="form.$invalid && !$formunchanged" prevent-click>Agregar actividad</a>
                     <a href="#" class="btn btn-primary" ng-click="update(activity.id, form)"  ng-disabled="form.$invalid && !$formunchanged" ng-show="editing" prevent-click>Guardar cambios</a>
                 </div>

@@ -375,10 +375,12 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         }
     }
 
-    $scope.closeModal = function() {
+    $scope.closeModal = function(form) {
         $scope.activity = {};
         $('#activityModal').modal('hide');
         $scope.editing = false;
+        $scope.$formunchanged = true;
+        form.$invalid = false;
     }
 
     $scope.newActivity = function() {
