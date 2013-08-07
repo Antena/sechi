@@ -1,0 +1,1 @@
+eb: target/start ${JAVA_OPTS} -Dconfig.resource=heroku.conf
