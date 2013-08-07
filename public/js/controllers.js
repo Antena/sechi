@@ -239,6 +239,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.initMap = function() {
+    	console.log('asdas');	
         if (!$scope.mapLoaded) {
             setTimeout(function() {
                 var mapOptions = {
@@ -275,11 +276,70 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                         $rootScope.resource.address.lat = event.latLng.lat();
                         $rootScope.resource.address.lng = event.latLng.lng();
                     }
+                    
                     $scope.$apply();
                 });
+                $scope.initUsig();
             }, 1000)
         }
         $scope.mapLoaded = true;
+    }
+    
+    $scope.initUsig = function(){
+    	var ac = new usig.AutoCompleter('inputAddress', {
+       		rootUrl: 'http://servicios.usig.buenosaires.gob.ar/usig-js/2.4/',
+       		skin: 'usig4',
+       		onReady: function() {
+//       			$('#inputAddress').val('').removeAttr('disabled').focus();	        			
+       		},
+       		afterSelection: function(option) {inputAddress
+       		},
+
+			afterGeoCoding : function(pt) {
+				if (pt instanceof usig.Punto) {
+					$.ajax({
+						type : "GET",
+						url : 'http://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas?x=' + pt.x +'&y=' + pt.y + '&output=lonlat',
+						data : null,
+						dataType: 'jsonp',
+						success : function(d) {
+							var location = new google.maps.LatLng(d.resultado.y,d.resultado.x);
+							
+							$rootScope.resource.address.lat = location.lat();
+			                $rootScope.resource.address.lng = location.lng();
+			                $scope.map.setCenter(location);
+			                if (!$scope.marker) {
+			                    $scope.marker = new google.maps.Marker({
+			                        map: $scope.map,
+			                        position: location,
+			                        draggable: true
+			                    });
+			                    google.maps.event.addListener(
+			                        $scope.marker,
+			                        'drag',
+			                        function() {
+			                            $rootScope.resource.address.lat = $scope.marker.position.lat();
+			                            $rootScope.resource.address.lng = $scope.marker.position.lng();
+			                            $scope.$apply();
+			                        }
+			                    );
+			                } else {
+			                    $scope.marker.setPosition(location);
+			                }
+							
+			                $scope.$apply();
+						},
+						error : null
+					});
+				}
+			}
+		});
+
+		ac.addSuggester('Catastro', {
+			inputPause : 200,
+			minTextLength : 1,
+			showError : false
+		});
     }
 
     $scope.geocoder = new google.maps.Geocoder();
@@ -319,6 +379,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.addMarker = function() {
+    	console.log('asd');
         var location = new google.maps.LatLng($rootScope.resource.address.lat, $rootScope.resource.address.lng);
         if (!$scope.marker) {
             $rootScope.resource.address.lat = location.lat();
