@@ -1,4 +1,4 @@
-<form ng-controller="ActivityController">
+<form ng-controller="ActivityController" name="form">
     <fieldset>
         <legend>Actividades de la organización (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
         <div class="alert alert-info" ng-show="resource.activities.length == 0">
@@ -72,12 +72,14 @@
                     <h4 class="modal-title">Agregar nueva actividad</h4>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form name="form">
                         <fieldset>
                             <div class="col-12">
                                 <label class="col-lg-12 control-label">Actividad</label>
-                                <div class="col-lg-2">
-                                    <input type="text" class="form-control" placeholder="Nº" ng-model="activity.code" ng-change="codeEntered()">
+                                <div class="col-lg-2" ng-class="{'has-error': form.inputCode.$dirty && form.inputCode.$invalid}">
+                                    <input type="text" class="form-control"
+                                           name="inputCode" placeholder="Nº"
+                                           ng-model="activity.code" ng-change="codeEntered()" required ng-pattern="/^([1-9]|[1-3][0-9]|4[0-8])$/">
                                 </div>
                                 <div class="col-lg-5">
                                     <select class="form-control" ng-model="selectedTopic" ng-options="topic for topic in activityTypes.topics()" ng-change="topicChange()">
@@ -87,6 +89,8 @@
                                     <select class="form-control" ng-model="selectedType" ng-options="type.name for type in activityTypes.types | filterByTopic:selectedTopic" ng-change="typeChange(selectedType)">
                                     </select>
                                 </div>
+                                <p class="text-danger" style="margin-left: 15px" ng-show="form.inputCode.$dirty && form.inputCode.$error.required">El código de actividad es requerido</p>
+                                <p class="text-danger" style="margin-left: 15px" ng-show="form.inputCode.$dirty && form.inputCode.$error.pattern">Por favor, ingrese un código de actividad válido</p>
                                 <div class="col-lg-12" style="margin-top: 5px">
                                     <textarea class="form-control" rows="3" placeholder="Descripción" ng-model="activity.description"></textarea>
                                 </div>
@@ -149,13 +153,10 @@
                         </fieldset>
                     </form>
                 </div>
-                <div class="well">
-                    {{ activity.id }}
-                </div>
                 <div class="modal-footer">
                     <a href="#" class="btn" ng-click="closeModal()" prevent-click>Cancelar</a>
-                    <a href="#" class="btn btn-primary" ng-click="save()" ng-hide="editing" prevent-click>Agregar actividad</a>
-                    <a href="#" class="btn btn-primary" ng-click="update(activity.id)" ng-show="editing" prevent-click>Guardar cambios</a>
+                    <a href="#" class="btn btn-primary" ng-click="save(form)" ng-hide="editing" ng-disabled="form.$invalid && !$formunchanged" prevent-click>Agregar actividad</a>
+                    <a href="#" class="btn btn-primary" ng-click="update(activity.id, form)"  ng-disabled="form.$invalid && !$formunchanged" ng-show="editing" prevent-click>Guardar cambios</a>
                 </div>
             </div>
         </div>

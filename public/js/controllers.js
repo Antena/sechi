@@ -155,12 +155,12 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.steps = [
-        { step: 0, title: "Ficha", template:"assets/partials/form/step0.html", completed: false, active: function() { return true } },
-        { step: 1, title: "Organización", template:"assets/partials/form/step1.html", completed: false, active: function() { return true } },
-        { step: 2, title: "Ubicación", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()", active: function() { return true } },
-        { step: 3, title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false, active: function() { return true } },
-        { step: 4, title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false, active: function() { return true } },
-        { step: 5, title: "Información adicional", template:"assets/partials/form/step5.html", completed: false, active: function() { return !$rootScope.resource.isState() } }
+        { step: 0, name:'step0', title: "Ficha", template:"assets/partials/form/step0.html", completed: false, active: function() { return true } },
+        { step: 1, name:'step1', title: "Organización", template:"assets/partials/form/step1.html", completed: false, active: function() { return true } },
+        { step: 2, name:'step2', title: "Ubicación", template:"assets/partials/form/step2.html", completed: false, onload: "$scope.initMap()", active: function() { return true } },
+        { step: 3, name:'step3', title: "Tipo de organización", template:"assets/partials/form/step3.html", completed: false, active: function() { return true } },
+        { step: 4, name:'step4', title: "Actividades de la organización", template:"assets/partials/form/step4.html", completed: false, active: function() { return true } },
+        { step: 5, name:'step5', title: "Información adicional", template:"assets/partials/form/step5.html", completed: false, active: function() { return !$rootScope.resource.isState() } }
     ];
 
     $scope.stepslength = function() {
@@ -169,8 +169,20 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.currentStep = 0;
     $scope.completed = 0;
+    $scope.$formunchanged = true;
 
-    $scope.next = function() {
+    $scope.next = function(form) {
+
+        if (form.$invalid) {
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
+
         if (!$scope.steps[$scope.currentStep].completed) {
             $scope.steps[$scope.currentStep].completed = true;
             $scope.completed++;
@@ -180,6 +192,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             eval($scope.steps[$scope.currentStep].onload);
         }
 
+        $scope.$formunchanged = true;
     }
 
     $scope.prev = function() {
@@ -347,6 +360,8 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $scope.activity.code = type.code;
     }
 
+    $scope.$formunchanged = true;
+
     $scope.codeEntered = function() {
         var filteredType = $scope.activityTypes.types.filter(function (type) {
             return type.code == parseInt($scope.activity.code);
@@ -397,13 +412,33 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $('#deleteModal').modal('hide');
     }
 
-    $scope.save = function() {
+    $scope.save = function(form) {
+        if (form.$invalid) {
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
+
+        $scope.$formunchanged = true;
         $scope.activity.id = $rootScope.resource.activities.length;
         $rootScope.resource.activities.push($scope.activity);
         $scope.closeModal();
     }
 
-    $scope.update = function(activityId) {
+    $scope.update = function(activityId, form) {
+        if (form.$invalid) {
+            $scope.$formunchanged = false;
+            for (key in form) {
+                if (key.indexOf("$") < 0) {
+                    form[key].$dirty = true;
+                }
+            }
+            return;
+        }
         $rootScope.resource.activities[activityId] = $scope.activity;
         $scope.closeModal();
     }

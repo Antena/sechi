@@ -21,6 +21,9 @@ filters.filter('activityName', ['ActivityType', function(ActivityType) {
         var type = ActivityType.types.filter(function(type) {
             return type.code == code;
         })[0];
+        if (!type) {
+            return "";
+        }
         return type.name + " (" + type.topic + ")";
     }
 }])
