@@ -24,6 +24,10 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
 
     $http({method: 'GET', url: '/resources'}).
         success(function (data, status, headers, config) {
+        	data=data.filter(function(d){
+        		return d.active;
+        	});
+        	
             data.map(function(resource) {
 
                 var marker = new google.maps.Marker({
@@ -56,7 +60,8 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     $http({method: 'GET', url: '/resources'}).
         success(function (data, status, headers, config) {
             data.map(function (d) {
-                d.id = d._id.$oid;
+                d._id = d._id.$oid;
+                return d;
             });
             $rootScope.resources = data;
 
@@ -65,6 +70,20 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
             // called asynchronously if an error occurs
             // or server returns response with an error status.
         });
+    
+    $scope.toggle= function(resource){
+    	var postData=$.extend({},resource);
+    	postData.active=!resource.active;
+    	$http({method: 'PUT', url: '/resources', data: postData}).
+        success(function (data, status, headers, config) {
+        	resource.active=!resource.active;
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
+    	
+    }
 
 
 }])
@@ -160,6 +179,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $rootScope.resource = {
     	user: $rootScope.user,
+    	active:false,
         address: { lat: null, lng: null },
         organizationType: 'state',
         organizationTypes: OrganizationType.load(),
