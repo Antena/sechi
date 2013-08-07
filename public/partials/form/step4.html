@@ -79,7 +79,7 @@
                                 <div class="col-lg-2" ng-class="{'has-error': form.inputCode.$dirty && form.inputCode.$invalid}">
                                     <input type="text" class="form-control"
                                            name="inputCode" placeholder="Nº"
-                                           ng-model="activity.code" ng-change="codeEntered()" required ng-pattern="/^([1-9]|[1-3][0-9]|4[0-8])$/">
+                                           ng-model="activity.code" ng-change="codeEntered()" ng-pattern="/^([1-9]|[1-3][0-9]|4[0-8])$/">
                                 </div>
                                 <div class="col-lg-5">
                                     <select class="form-control" ng-model="selectedTopic" ng-options="topic for topic in activityTypes.topics()" ng-change="topicChange()">
