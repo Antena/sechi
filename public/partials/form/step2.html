@@ -1,4 +1,4 @@
-<form class="form-horizontal">
+<form class="form-horizontal" name="form">
     <fieldset>
         <legend>Dirección (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
         <div class="form-group">
@@ -62,17 +62,29 @@
             <label class="control-label" style="margin-right: 10px">Ubicación exacta</label>
             <form class="form-horizontal">
                 <fieldset>
-                    <div class="form-group col-lg-12 pull-right" style="margin-right: -5px">
-                        <input type="text" class="form-control" id="exampleAddressLatitude" placeholder="Latitud" ng-model="resource.address.lat">
+                    <div class="form-group col-lg-12 pull-right" style="margin-right: -5px" ng-class="{'has-error': form.exampleAddressLatitude.$dirty && form.exampleAddressLatitude.$invalid}">
+                        <input type="text" class="form-control"
+                               id="exampleAddressLatitude" name="exampleAddressLatitude" placeholder="Latitud"
+                               ng-model="resource.address.lat" required>
                     </div>
-                    <div class="form-group col-lg-12 pull-right" style="margin-right: -5px">
-                        <input type="text" class="form-control" id="exampleAddressLongitude" placeholder="Longitud" ng-model="resource.address.lng">
+                    <div class="form-group col-lg-12 pull-right" style="margin-right: -5px" ng-class="{'has-error': form.exampleAddressLongitude.$dirty && form.exampleAddressLongitude.$invalid}">
+                        <input type="text" class="form-control"
+                               id="exampleAddressLongitude" name="exampleAddressLongitude" placeholder="Longitud"
+                               ng-model="resource.address.lng" required>
                     </div>
+
+
                     <div class="form-group col-lg-12 pull-right" style="margin-right: -5px">
                         <button type="button" class="btn btn-default btn-small" ng-click="addMarker()">Ubicar coordenadas</button>
                     </div>
                 </fieldset>
             </form>
+            <p class="text-danger" ng-show="(form.exampleAddressLatitude.$dirty && form.exampleAddressLatitude.$error.required) || (form.exampleAddressLongitude.$dirty && form.exampleAddressLongitude.$error.required)">
+                Es necesario determinar la locación del recurso. Puede hacerlo:<br/>
+                A: ingresando una dirección válida<br/>
+                B: indicando las coordenadas<br/>
+                C: ubicándolo manualmente en el mapa
+            </p>
         </div>
         <div class="col-lg-10" style="padding-left: 5px; padding-right: 0px;">
             <div id="address-map" style="width: 100%"></div>
