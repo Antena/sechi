@@ -2,9 +2,12 @@ package controllers;
 
 import java.security.MessageDigest;
 
+import org.codehaus.jackson.node.ObjectNode;
+
 import models.User;
 import play.Logger;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
@@ -46,6 +49,19 @@ public class Application extends Controller {
 			return redirect(routes.Application.index());
 		}
 	}
+	
+	public static Result currentUser() {
+		String email = session().get("email");
+		User findByEmail = User.findByEmail(email);
+		ObjectNode newObject = Json.newObject();
+		if (findByEmail != null) {
+			newObject.put("id", findByEmail.getId());
+			newObject.put("name", findByEmail.name);
+		}
+
+		return ok(newObject);
+	}
+
 
 	/**
 	 * Handle login form submission.

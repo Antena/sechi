@@ -1,12 +1,19 @@
 var controllers = angular.module('sechi.controllers', []);
 
-controllers.controller('AppController', ['$rootScope', function($rootScope) {
+controllers.controller('AppController', ['$rootScope','$http', function($rootScope,$http) {
     $rootScope.page = 'map';
+    $http({method: 'GET', url: '/currentUser'}).
+    success(function (data, status, headers, config) {
+        $rootScope.user = data;
+    }).error(function (data, status, headers, config) {
+    	console.log('could not get loggedIn user');
+    });
 
 }])
 
 controllers.controller('MapController', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
     $rootScope.page = 'map';
+    
 
     var mapOptions = {
         center: new google.maps.LatLng(-34.63123, -58.441772),
@@ -152,6 +159,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     $scope.settlements = Settlement;
 
     $rootScope.resource = {
+    	user: $rootScope.user,
         address: { lat: null, lng: null },
         organizationType: 'state',
         organizationTypes: OrganizationType.load(),
