@@ -2,11 +2,19 @@
     <fieldset>
         <legend>Datos de la ficha (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
         <div class="form-group">
+        	<label class="col-lg-2 control-label">Comuna</label>
+            <div class="col-lg-4" ng-class="{'has-error': form.selectSettlement.$dirty && form.selectSettlement.$invalid}">
+                <select class="form-control" name="selectComuna"
+                        ng-model="resource.comuna" required>
+                    <option ng-repeat="set in comunas" value="{{ set.name }}" ng-selected="resource.comuna == set.name">{{ set.name }}</option>
+                </select>
+                <span class="help-block" ng-show="form.selectSettlement.$dirty && form.selectSettlement.$error.required">La comuna es requerida</span>
+            </div>
             <label class="col-lg-2 control-label">Barrio / Villa / Complejo</label>
-            <div class="col-lg-10" ng-class="{'has-error': form.selectSettlement.$dirty && form.selectSettlement.$invalid}">
+            <div class="col-lg-4" ng-class="{'has-error': form.selectSettlement.$dirty && form.selectSettlement.$invalid}">
                 <select class="form-control" name="selectSettlement"
-                        ng-model="resource.settlement" required>
-                    <option ng-repeat="set in settlements" value="{{ set }}" ng-selected="resource.settlement == set">{{ set }}</option>
+                        ng-model="resource.settlement" ng-options="b for b in getBarrios()" required >
+<!--                     <option ng-repeat="set in comunas" value="{{ set }}" ng-selected="resource.settlement == set">{{ set }}</option> -->
                 </select>
                 <span class="help-block" ng-show="form.selectSettlement.$dirty && form.selectSettlement.$error.required">El Barrio/Villa/Complejo es requerido</span>
             </div>
@@ -58,7 +66,7 @@
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" ng-model="resource.acceptsTaC">
-                        ¿Consiente a la publicación de las actividades de su organización en una Guía/página Web de la SECHI?
+                        Acepta la publicación de las actividades de su organización en una Guía/página Web de la SECHI
                     </label>
                 </div>
             </div>

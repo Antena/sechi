@@ -179,7 +179,26 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
 controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'OrganizationType', 'Settlement', '$http', '$location', function($scope, $rootScope, OrganizationType, Settlement, $http, $location) {
     $rootScope.page = 'resource';
     $scope.editing = true;
-    $scope.settlements = Settlement;
+    var settlementsBarrios=[];
+    
+    Settlement.map(function(d){
+    	settlementsBarrios=settlementsBarrios.concat(d.barrios);
+    	return d.barrios;
+    })
+   
+    $scope.getBarrios= function(){
+    	if($scope.resource.comuna){
+    		return Settlement.filter(function(d){
+    			return d.name==$scope.resource.comuna;
+    		})[0].barrios
+    		
+    	}
+    	return []
+    }
+   
+    $scope.comunas = Settlement;
+    $scope.comuna = $scope.comunas[0];
+    $scope.settlements = settlementsBarrios;
 
     $rootScope.resource = {
     	user: $rootScope.user,
