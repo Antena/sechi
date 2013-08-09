@@ -57,6 +57,7 @@ public class Application extends Controller {
 		if (findByEmail != null) {
 			newObject.put("id", findByEmail.getId());
 			newObject.put("name", findByEmail.name);
+			newObject.put("role", findByEmail.role);
 		}
 
 		return ok(newObject);

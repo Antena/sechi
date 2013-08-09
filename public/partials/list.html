@@ -14,14 +14,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="r in resources">
+            <tr ng-repeat="r in resources ">
                 <td>{{ r.settlement }}</td>
                 <td>{{ r.name }}</td>
                 <td>{{ r.date | date:'dd/MM/yyyy' }}</td>
                 <td>{{r.user.name}}</td>
                 <td>{{ r.interviewee.name }} {{ r.interviewee.surname }}</td>
                 <td><p ng-show="r.active">Activo</p><p ng-show="!r.active">Inactivo</p></td>
-                <td><a href="/#/recurso/{{r.id}}">Ver  /</a> <a ng-show="!r.active" ng-click="toggle(r)"  href="">Activar</a><a ng-show="r.active" ng-click="toggle(r)" href="">Desactivar</a></td>
+                <td><a href="/#/recurso/{{r._id}}">Ver  /</a> <a ng-show="!r.active" ng-click="toggle(r)"  href="">Activar</a><a ng-show="r.active" ng-click="toggle(r)" href="">Desactivar</a></td>
             </tr>
             <tbody/>
         </table>

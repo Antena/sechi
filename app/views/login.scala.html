@@ -1,86 +1,77 @@
 @(loginForm: Form[Application.Login])
 
 <html>
-<head>
-<title>Portal de estudios - Centro de Diagnóstico Dr. Enrique
-	Rossi</title>
-<meta charset="utf-8">
-<link rel="stylesheet" media="screen" href="@routes.Assets.at("css/bootstrap.min.css")">
-<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="assets/js/md5.js"></script>
+    <head>
+        <title>Secretaría de hábitat e inclusión</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/bootstrap.min.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="assets/js/md5.js"></script>
+    </head>
+    <body>
 
-</head>
-<body>
+        <div class="container">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><strong>Secretaría de hábitat e inclusión</strong></h4>
+                        <h5>Carga y visualización de los recursos de las villas</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="login"  action ="/authenticate" method="POST"
+                        class="form-horizontal">
+                            <fieldset>
+                                @if(loginForm.hasGlobalErrors) {
+                                    <div class="alert alert-error col-lg-12">
+                                    @loginForm.globalError.message
+                                    </div>
+                                }
+                                @if(flash.contains("success")) {
+                                    <div class="alert col-lg-12">
+                                    @flash.get("success")
+                                    </div>
+                                }
 
-	<div class="container">
-		<h3>Sechi</h3>
-		<form id="login"  action ="/authenticate" method="POST"
-			class="form-horizontal">
-			<fieldset>
-				<div class="row">
-					@if(loginForm.hasGlobalErrors) {
+                            <div class="form-group">
+                                <label class="control-label col-lg-4" for="email">Email</label>
+                                <div class="controls col-lg-8">
+                                    <input type="text" class="form-control" id="email" name="email">
+                                </div>
+                            </div>
 
-					<div class="alert alert-error col-lg-3">@loginForm.globalError.message</div>
-					} @if(flash.contains("success")) {
-					<div class="alert col-lg-3">@flash.get("success")</div>
-					}
-				</div>
-				<div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-lg-4" for="password">Contraseña</label>
+                                <div class="controls col-lg-8">
+                                    <input type="password" class="form-control" id="password"
+                                    name="password">
+                                </div>
+                            </div>
 
-					<div class="form-group">
-						<label class="control-label col-lg-1" for="email">Email</label>
-						<div class="controls col-lg-2">
-							<input type="text" class="form-control" id="email" name="email">
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="form-group">
-						<label class="control-label col-lg-1" for="password">Contraseña</label>
-						<div class="controls col-lg-2">
-							<input type="password" class="form-control" id="password"
-								name="password">
-						</div>
-					</div>
-				</div>
-				
-				
-				
-				<div class="row">
-					<div class="form-group">
-						<div class="controls">
-							<button type="submit" class="btn btn-default">Ingresar</button>
-						</div>
-					</div>
-				</div>
-			</fieldset>
-		</form>
-
-	</div>
+                            <div class="form-group">
+                                <div class="controls col-lg-8 col-offset-4">
+                                    <div class="controls">
+                                        <button type="submit" class="btn btn-default">Ingresar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-</body>
+    </body>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 	$("#login").submit(function(e) {
-		console.log('asd');
-		var email = $("#email").val();
-		var password= CryptoJS.MD5($("#password").val()).toString();
-		console.log(password);
-		$("#password").val(password);
-// 		$.ajax({
-// 			type : "POST",
-// 			url : "/authenticate",
-// 			data : {
-// 				email : email,
-// 				password : password
-// 			},
-// 			success : function(data){
-// 				window.location.replace(...)
-// 			}
-// 		});
-	})
-</script>
+        console.log('asd');
+        var email = $("#email").val();
+        var password= CryptoJS.MD5($("#password").val()).toString();
+        console.log(password);
+        $("#password").val(password);
+        })
+    </script>
 </html>
