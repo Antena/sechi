@@ -39,6 +39,21 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="inputInterviewer" class="col-lg-2 control-label">Nombre del entrevistador</label>
+            <div class="col-lg-4" ng-class="{'has-error': form.inputInterviewee.$dirty && form.inputInterviewee.$invalid}">
+    			<input type="text" class="form-control"
+           			id="inputInterviewer" name="inputInterviewer" placeholder="Nombre"
+           			ng-model="resource.interviewer.name" required>
+    			<span class="help-block" ng-show="form.inputInterviewer.$dirty && form.inputInterviewer.$error.required">El nombre del entrevistador es requerido</span>
+			</div>
+    			<div class="col-lg-4" ng-class="{'has-error': form.inputIntervieweeSurname.$dirty && form.inputIntervieweeSurname.$invalid}">
+                <input type="text" class="form-control"
+                       id="inputInterviewerSurname" name="inputInterviewerSurname" placeholder="Apellido"
+                       ng-model="resource.interviewer.surname" required>
+                <span class="help-block" ng-show="form.inputInterviewerSurname.$dirty && form.inputInterviewerSurname.$error.required">El apellido del entrevistador es requerido</span>
+            	</div>
+        </div>
+        <div class="form-group">
             <div class="col-lg-10 col-offset-2">
                 <div class="checkbox">
                     <label>
