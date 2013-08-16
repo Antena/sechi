@@ -27,3 +27,21 @@ filters.filter('activityName', ['ActivityType', function(ActivityType) {
         return type.name + " (" + type.topic + ")";
     }
 }])
+
+
+filters.filter('roleName', [function(RoleName) {
+    return function(code) {
+        if (!code) {
+            return "";
+        }
+        if(code=='admin'){
+        	return "Administrador";
+        }
+        
+        if(code=="normal"){
+        	return "Encuestador";
+        }
+        
+        return "";
+    }
+}])

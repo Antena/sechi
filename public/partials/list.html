@@ -1,31 +1,108 @@
 <div class="container">
-    <div class="row">
-        <h1>Recursos</h1>
-        <table class="table table-striped">
+	<div class="row">
+		<h1>Recursos</h1>
+	</div>
+	<div class="row">
+		<div style="border-left: 5px solid #eee; border-width:1px;">
+			<h3>Filtros</h3>
+			<div class="col-lg-6">
+				<label class="col-lg-2 control-label">Actividad</label>
+				<div class="col-lg-2"
+					ng-class="{'has-error': form.inputCode.$dirty && form.inputCode.$invalid}">
+					<input type="text" class="form-control" name="inputCode"
+						placeholder="Nº" ng-model="activity.code"
+						ng-change="codeEntered()"
+						ng-pattern="/^([1-9]|[1-3][0-9]|4[0-8])$/">
+				</div>
+				<div class="col-lg-4">
+					<select class="form-control" ng-model="selectedTopic"
+						ng-options="topic for topic in activityTypes.topics()"
+						ng-change="topicChange()">
+					</select>
+				</div>
+				<div class="col-lg-4">
+					<select class="form-control" ng-model="selectedType"
+						ng-options="type.name for type in activityTypes.types | filterByTopic:selectedTopic"
+						ng-change="typeChange(selectedType)">
+					</select>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<label class="col-lg-2 control-label">Comuna</label>
+				<div class="col-lg-3">
+					<select class="form-control" name="selectComuna"
+						ng-model="resource.comuna">
+						<option ng-repeat="set in comunas" value="{{ set.name }}">{{
+							set.name }}</option>
+					</select>
+				</div>
+				<label class="col-lg-2 control-label">Barrio</label>
+				<div class="col-lg-3">
+					<select class="form-control" name="selectSettlement"
+						ng-model="resource.settlement"
+						ng-options="b for b in getBarrios()">
+					</select>
+				</div>
+				<div class="col-lg-2">
+					<a class="col-lg-12" ng-click="resetFilters()">Limpiar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<h2>Recursos</h2>
+	</div>
+
+	<div class="row">
+		<p class="text-muted" ng-show="emptySet">No se encontraron recursos para la seleción</p>
+        <table class="table table-striped" ng-show="!emptySet">
             <thead>
             <tr>
                 <th>Villa/Barrio/Complejo</th>
                 <th>Nombre</th>
                 <th>Fecha</th>
                 <th>Usuario</th>
-                <th>Entrevistado</th>
                 <th>Estado</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="r in resources ">
+            <tr ng-repeat="r in getResources()">
                 <td>{{ r.settlement }}</td>
                 <td>{{ r.name }}</td>
                 <td>{{ r.date | date:'dd/MM/yyyy' }}</td>
                 <td>{{r.user.name}}</td>
-                <td>{{ r.interviewee.name }} {{ r.interviewee.surname }}</td>
                 <td><p ng-show="r.active">Activo</p><p ng-show="!r.active">Inactivo</p></td>
-                <td><a href="/#/recurso/{{r._id}}">Ver  /</a> <a ng-show="!r.active" ng-click="toggle(r)"  href="">Activar</a><a ng-show="r.active" ng-click="toggle(r)" href="">Desactivar</a></td>
+                <td>
+                	<a href="/#/recurso/{{r._id}}">Ver  /</a> 
+                	<a ng-show="!r.active" ng-click="toggle(r)"  href="">Activar</a><a ng-show="r.active" ng-click="toggle(r)" href="">Desactivar  /</a>
+					<a data-toggle="modal" href="#deleteModal"  ng-click="setResourceToDelete(r._id)">Eliminar</a>
+                </td>
             </tr>
             <tbody/>
         </table>
 
     </div>
 </div>
+
+<!-- Modal -->
+    <div class="modal fade" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Eliminar Recurso</h4>
+                </div>
+                <div class="modal-body">
+                    ¿Está seguro que desea eliminar el recurso?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" ng-click="delete(r)">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </html>

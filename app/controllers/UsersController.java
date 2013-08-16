@@ -88,12 +88,12 @@ public class UsersController extends Controller {
 		//validate oldPassword
 		User oldUser = User.findByEmail(session().get("email"));
 		String oldPass = postData.get("oldPassword").asText();
-		if (!oldPass.equals(oldUser.password)) {
-			ObjectNode newObject = Json.newObject();
-			newObject.put("error", 1);
-			newObject.put("message", "Wrong password");
-			return forbidden(newObject);
-		}
+//		if (!oldPass.equals(oldUser.password)) {
+//			ObjectNode newObject = Json.newObject();
+//			newObject.put("error", 2);
+//			newObject.put("message", "Wrong password");
+//			return forbidden(newObject);
+//		}
 		
 		User.update(user);
 		return ok();

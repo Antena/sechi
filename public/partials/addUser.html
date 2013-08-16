@@ -1,51 +1,61 @@
 <div class="container">
-	<form class="form-horizontal">
+	<form name="form" class="form-horizontal" novalidate ng-submit="finish()">
 		<fieldset>
 			<legend>Registro de Usuario</legend>
-			<div class="form-group">
+			<div class="form-group" ng-class="{'has-error': form.inputName.$dirty && form.inputName.$invalid}">
 				<label for="inputName" class="col-lg-2 control-label">Nombre</label>
 				<div class="col-lg-10">
-					<input type="text" class="form-control" id="inputName"
-						placeholder="Nombre completo" ng-model="user.name">
+					<input type="text" class="form-control" id="inputName" name="inputName"
+						placeholder="Nombre completo" ng-model="user.name" required>
+						<span class="help-block" ng-show="form.inputName.$dirty && form.inputName.$error.required">Es necesario ingresar Nombre</span>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-class="{'has-error': form.inputEmail.$dirty && !form.inputEmail.$valid}" >
 				<label for="inputEmail" class="col-lg-2 control-label">Email</label>
 				<div class="col-lg-10">
-					<input type="text" class="form-control" id="inputFantasyName"
-						placeholder="Email" ng-model="user.email">
+					<input type="email" class="form-control" id="inputEmail"
+						name="inputEmail" placeholder="Email" ng-model="user.email" required ng-change="changeEmail()" ng-disabled="editing">
+					<span class="help-block" ng-show="form.inputEmail.$dirty && form.inputEmail.$error.required">Es necesario ingresar e-mail</span>
+					<span class="help-block" ng-show="form.inputEmail.$dirty && form.inputEmail.$error.existing">Ya existe un usuario con ese email</span>
+					<span class="help-block" ng-show="form.inputEmail.$dirty && form.inputEmail.$error.email">No es un email válido</span>
+					
+					 
 				</div>
 			</div>
-			<div class="form-group" ng-hide="!editing">
+			
+			<div class="form-group" ng-hide="true" ng-class="{'has-error': form.inputOldPassword.$dirty && form.inputOldPassword.$invalid}">
 				<label for="inputOldPassword" class="col-lg-2 control-label">Password anterior</label>
 				<div class="col-lg-10">
-					<input type="password" class="form-control" id="inputOldPassword"
+					<input type="password" class="form-control" id="inputOldPassword" name="inputOldPassword"
 						placeholder="Password anterior" ng-model="user.oldPassword">
+					<span class="help-block" ng-show="form.inputOldPassword.$dirty && form.inputOldPassword.$error.wrong">La contraseña es invalida</span>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-class="{'has-error': form.inputPassword.$dirty && form.inputPassword.$invalid}" ng-hide="editing" >
 				<label for="inputPassword" class="col-lg-2 control-label">Password</label>
 				<div class="col-lg-10">
 					<input type="password" class="form-control" id="inputPassword"
-						placeholder="Password" ng-model="user.password">
+						placeholder="Password" ng-model="user.password" ng-required="!editing" ng-change="checkPassword()">
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="inputPassword" class="col-lg-2 control-label"></label>
+			
+			<div class="form-group" ng-class="{'has-error': form.inputPasswordRepeat.$dirty && !form.inputPasswordRepeat.$valid}" ng-hide="editing">
+				<label for="inputPasswordRepeat" class="col-lg-2 control-label"></label>
 				<div class="col-lg-10">
-					<input type="password" class="form-control" id="inputPassword"
-						placeholder="Repetir password" ng-model="user.passwordRepeat">
+					<input type="password" class="form-control" id="inputPasswordRepeat" name="inputPasswordRepeat"
+						placeholder="Repetir password" ng-model="user.passwordRepeat" ng-change="checkPassword()" ng-required="!editing">
+						<span class="help-block" ng-show="form.inputPasswordRepeat.$dirty && form.inputPasswordRepeat.$error.dontMatch">Las claves no coinciden</span>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="inputRole" class="col-lg-2 control-label">Rol</label>
 				<div class="col-lg-4">
-					<select class="form-control" ng-model="role" ng-options="r.name for r in roles"></select>
+					<select class="form-control" ng-model="role" ng-options="r.name for r in roles" ></select>
 				</div>
 			
 			</div>
 
-		    <button type="submit" class="btn btn-default" ng-click="finish()">Guardar</button>
+		    <button type="submit" class="btn btn-default" ng-disabled="form.$invalid" >Guardar</button>
 		</fieldset>
 	</form>
 </div>

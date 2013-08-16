@@ -57,7 +57,11 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
 
 }])
 
-controllers.controller('ResourceListController', ['$scope', '$rootScope','$http', function($scope, $rootScope,$http) {
+controllers.controller('ResourceListController', ['$scope', '$rootScope','$http','$location','$route','ActivityType','Settlement','$filter', function($scope, $rootScope,$http,$location,$route,ActivityType,Settlement,$filter) {
+	
+	
+	$scope.activity = {};
+	$scope.activityTypes = ActivityType;
     $rootScope.page = 'list';
     $http({method: 'GET', url: '/resources'}).
         success(function (data, status, headers, config) {
@@ -68,6 +72,12 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
             $rootScope.resources = data.filter(function(resource) {
                 return resource.user.id == $rootScope.user.id || $rootScope.user.role == "admin";
             });
+            
+            $rootScope.resources.sort(function(a,b){
+            	if(a.name < b.name) return -1;
+                if(a.name > b.name) return 1;
+                return 0;
+            })
 
         }).
         error(function (data, status, headers, config) {
@@ -88,7 +98,134 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
         });
     	
     }
-
+    
+    $scope.delete = function(){
+    	$('#deleteModal').modal('hide');
+    	$http({method: 'DELETE', url: '/resources/'+$scope.resourceToDeleteId}).
+        success(function (data, status, headers, config) {
+        	$rootScope.resources = $rootScope.resources.filter(function(r){
+        		return r._id!=$scope.resourceToDeleteId;
+        	});
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
+    	
+    }
+    
+    $scope.setResourceToDelete = function(id){
+    	console.log(id);
+    	$scope.resourceToDeleteId = id;
+    }
+    
+    
+    //TODO:refactor , actually copied these functions from activity controller, should reuse component
+    $scope.typeChange = function(type) {
+        $scope.activity.code = type.code;
+    }
+    
+    $scope.topicChange = function() {
+        $scope.selectedCode = null;
+        $scope.selectedType = null;
+        $scope.activity.code = null;
+    }
+    
+    $scope.codeEntered = function() {
+        var filteredType = $scope.activityTypes.types.filter(function (type) {
+            return type.code == parseInt($scope.activity.code);
+        });
+        if (filteredType.length > 0) {
+            $scope.selectedTopic = filteredType[0].topic;
+            $scope.selectedType = filteredType[0];
+        } else {
+            $scope.selectedTopic = null;
+            $scope.selectedType = null;
+        }
+    }
+    
+    var settlementsBarrios=[];
+    Settlement.map(function(d){
+    	settlementsBarrios=settlementsBarrios.concat(d.barrios);
+    	return d.barrios;
+    })
+   
+    $scope.getBarrios= function(){
+    	if($scope.resource && $scope.resource.comuna){
+    		return Settlement.filter(function(d){
+    			return d.name==$scope.resource.comuna;
+    		})[0].barrios
+    		
+    	}
+    	return []
+    }
+   
+    $scope.comunas = Settlement;
+    $scope.comuna = $scope.comunas[0];
+    $scope.settlements = settlementsBarrios;
+    
+    
+    //end of TODO
+    
+    $scope.getResources = function(){
+    	var filteredTypes=[];
+    	var filteredBarrios=[];
+    	
+    	if($scope.resources){
+    		if($scope.selectedTopic || $scope.selectedType){
+    			filteredTypes = [];
+    			if($scope.selectedType){
+    				filteredTypes.push($scope.selectedType.code);
+    			}else{
+    				filteredTypes=$filter('filterByTopic')($scope.activityTypes.types, $scope.selectedTopic, $scope.selectedTopic).map(function(d){
+    					return d.code;
+    				});
+    			}
+    		}
+    		if($scope.resource && ($scope.resource.comuna || $scope.resource.settlement)){
+    			if($scope.resource.settlement){
+    				filteredBarrios.push($scope.resource.settlement);
+    			}else{
+    				filteredBarrios=$scope.getBarrios();
+    			}
+    		}
+    		
+	    	var filteredResources = $rootScope.resources.filter(function(r){
+	    		var result=true;
+	    		if(filteredTypes.length>0){
+	    			result=false;
+		    		for(var i=0;i<r.activities.length;i++){
+		    			filteredTypes.map(function(d){
+		    				if(d==r.activities[i].code){
+		    					result=true;
+		    				}
+		    			})
+		    		}
+	    		}
+	    		if(result && filteredBarrios.length>0){
+	    			result=false;
+	    			filteredBarrios.map(function(barrio){
+	    				if(barrio==r.settlement)
+	    					result=true;
+	    			})
+	    		}
+	    		return result;
+	    	});
+	    	
+	    	$scope.emptySet=filteredResources.length==0;
+	    	return filteredResources;
+    	}
+    	return [];
+    }
+    
+    $scope.resetFilters = function(){
+    	if($scope.resource){
+    		$scope.resource.settlement=null;
+    		$scope.resource.comuna=null;
+    	}
+    	$scope.selectedTopic= null;
+    	$scope.selectedType =null;
+    }
 
 }])
 
@@ -111,9 +248,10 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
     $scope.user={};
     $scope.editing=false;
     
-    $scope.role={};
     $scope.roles=[{name:"Administrador",value:"admin"},{name:"Encuestador",value:"normal"}]
+    $scope.role=$scope.roles[1];
     
+ 
     var urls=$location.path().split('/');
     if(urls.length==3) {
     	$scope.editing=true;
@@ -155,7 +293,10 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
                 $location.path('/users')
             }).
             error(function (data, status, headers, config) {
-            	console.log(data);
+            	if(data.code==1){
+            		$scope.form.inputEmail.$error.existing=true;
+            		$scope.form.inputEmail.$valid=false;
+            	}
             });
     }
     
@@ -166,10 +307,31 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
                 $location.path('/users')
             }).
             error(function (data, status, headers, config) {
+            	if(data.error==2){
+            		$scope.form.inputOldPassword.$error.wrong=true;
+            		$scope.form.inputOldPassword.$invalid=true;
+            		$scope.form.inputOldPassword.$valid=false;
+            	}
             	console.log(data);
             });
     }
     
+    $scope.checkPassword = function () {
+        $scope.form.inputPasswordRepeat.$error.dontMatch = $scope.user.password !== $scope.user.passwordRepeat;
+        if($scope.form.inputPasswordRepeat.$error.dontMatch)
+        	$scope.form.inputPasswordRepeat.$valid=false;
+        else
+        	$scope.form.inputPasswordRepeat.$valid=true;
+    };
+    
+    $scope.changeEmail = function () {
+        if($scope.form.inputEmail.$error.existing){
+    		$scope.form.inputEmail.$error.existing=false;
+        	$scope.form.inputEmail.$invalid=false;
+        	$scope.form.inputEmail.$valid=true;
+        }
+
+    };
     
 
 
@@ -309,8 +471,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 $(elem).button('reset')
             }).
             error(function (data, status, headers, config) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
+
             });
     }
 
@@ -618,3 +779,5 @@ controllers.filter('filterByTopic', function() {
         return types.filter(function(type) { return type.topic == topic })
     }
 })
+
+
