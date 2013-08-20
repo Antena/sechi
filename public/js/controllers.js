@@ -39,6 +39,22 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
 
                 var content = '<p class="settlement">' + resource.settlement + '</p>';
                 content += "<p><strong>" + resource.name + "</strong></p>";
+                if(resource.address.street){
+                	content += "<p>" + resource.address.street + "</p>";
+                }
+                if(resource.openingHours){
+                	content += "<p>" + resource.openingHours + "</p>";
+            	}
+                
+                if(resource.telephone){
+                	content += "<p>" + resource.telephone + "</p>";
+            	}
+                
+                if(resource.openingHours){
+                	content += "<p>" + resource.function + "</p>";
+            	}
+                
+                
                 if ($rootScope.user.id == resource.user.id || $rootScope.user.role == "admin") {
                     content += '<p><a href="/#/recurso/' + resource._id + '">Editar</a></p>'
                 }
