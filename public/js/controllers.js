@@ -85,7 +85,7 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
     		  });  
     }
     
-    $http({method: 'GET', url: '/assets/geoJson/UTIUs.geoJson'}).
+    $http({method: 'GET', url: '/assets/geoJson/UTIUs.geojson'}).
     success(function (data, status, headers, config) {
     	for(var i=0;i<data.features.length;i++){
     		var points=data.features[i].geometry.coordinates[0].map(function(p){
