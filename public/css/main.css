@@ -48,3 +48,16 @@
     opacity: 0.8;
 }
 
+.legend-box{
+	margin-top:20px;
+}
+
+.map-legend {
+	width: 15px;
+	height: 15px;
+	background: #000;
+	float: left;
+	margin-right: 4px;
+}
+
+.map-legend.utis { background-color: rgb(214,21,122) }

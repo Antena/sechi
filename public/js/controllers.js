@@ -70,6 +70,44 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
             // called asynchronously if an error occurs
             // or server returns response with an error status.
         });
+    
+    
+    $scope.polygons=[];
+    
+    $scope.addListenerToPolygon = function(polygon,properties) {
+    	  google.maps.event.addListener(polygon, 'click', function (event) {
+    		  var infoWindow = $scope.infoWindow;
+    		  var content = "<p><strong>" + properties.Zona + "</strong></p>";
+    		  infoWindow.setContent(content);
+    		  var center = new google.maps.LatLng(properties.center[1],properties.center[0]);
+    		  infoWindow.setPosition( center);
+    		  infoWindow.open($scope.map);
+    		  });  
+    }
+    
+    $http({method: 'GET', url: '/assets/geoJson/UTIUs.geoJson'}).
+    success(function (data, status, headers, config) {
+    	for(var i=0;i<data.features.length;i++){
+    		var points=data.features[i].geometry.coordinates[0].map(function(p){
+    			return  new google.maps.LatLng(p[1],p[0]);
+    		});
+    		$scope.polygons[i] = new google.maps.Polygon({
+    			paths : points,
+    			strokeColor : "#000",
+    			strokeOpacity : 0.5,
+    			strokeWeight : 0.5,
+    			fillColor : "rgb(254,21,122)",
+    			fillOpacity : 0.5,
+    		});
+    		$scope.polygons[i].center=points[0];
+    		$scope.polygons[i].number=i;
+    		
+    		
+    		$scope.polygons[i].setMap($scope.map);
+    		$scope.addListenerToPolygon($scope.polygons[i],data.features[i].properties);
+    		
+    	}
+    });
 
 }])
 
@@ -242,6 +280,8 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     	$scope.selectedTopic= null;
     	$scope.selectedType =null;
     }
+    
+    $scope.resetFilters();
 
 }])
 
@@ -328,7 +368,6 @@ controllers.controller('addUserController', ['$scope', '$rootScope','$http','$lo
             		$scope.form.inputOldPassword.$invalid=true;
             		$scope.form.inputOldPassword.$valid=false;
             	}
-            	console.log(data);
             });
     }
     
@@ -372,6 +411,15 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     		
     	}
     	return []
+    }
+    
+    $scope.getComuna = function(d){
+    	console.log('comuna for:')
+    	console.log(d);
+    	var comuna = Settlement.filter(function(r){
+        	return r.name==d;
+        })[0];
+    	return comuna;
     }
    
     $scope.comunas = Settlement;
@@ -530,11 +578,22 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                     zoom: 11,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
+                
+                var comuna=$scope.getComuna($scope.resource.comuna);
+                console.log(comuna);
+                if(comuna && comuna.center){
+                	$scope.zoomedComuna = comuna;
+                	mapOptions.center= new google.maps.LatLng(comuna.center[1], comuna.center[0]);
+                	mapOptions.zoom = 14;
+                }
+                
                 $scope.map = new google.maps.Map(document.getElementById("address-map"), mapOptions);
 
                 if ($rootScope.resource.address && $rootScope.resource.address.lat && $rootScope.resource.address.lng) {
                     $scope.addMarker();
                 }
+                
+                
 
                 google.maps.event.addListener($scope.map, 'click', function(event) {
                     if (!$scope.marker) {
@@ -566,6 +625,13 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             }, 1000)
         }
         $scope.mapLoaded = true;
+        console.log($scope.zoomedComuna);
+        if($scope.zoomedComuna && $scope.resource.comuna!=$scope.zoomedComuna.name){
+        	console.log("centering..");
+        	var comuna=$scope.getComuna($scope.resource.comuna);
+        	var center=new google.maps.LatLng(comuna.center[1], comuna.center[0]);
+        	$scope.map.setCenter(center);
+        }
     }
     
     $scope.initUsig = function(){
