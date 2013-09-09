@@ -92,4 +92,14 @@ public class Application extends Controller {
 		return redirect(routes.Application.login());
 	}
 
+    /**
+     * The html5 offline cache manifest
+     * @return
+     */
+    public static Result cacheManifest() {
+        response().setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response().setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        return ok(views.html.cache.render()).as("text/cache-manifest");
+    }
+
 }
