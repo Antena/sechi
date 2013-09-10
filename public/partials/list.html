@@ -74,7 +74,11 @@
                 <td>{{r.user.name}}</td>
                 <td>No sincronizado</td>
                 <td>
-                    <button class="btn btn-success" ng-class="{disabled: offline}" ng-click="syncResource(r.localStorageIndex)">Sincronizar</button>
+                    <button class="btn btn-success" ng-class="{disabled: offline}"
+                            data-loading-text="Sincronizando..."
+                            ng-click="syncResource($event, r.localStorageIndex)">
+                        Sincronizar
+                    </button>
                 </td>
             </tr>
             <tr ng-repeat="r in getResources()">

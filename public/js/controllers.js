@@ -6,7 +6,7 @@ controllers.controller('AppController', ['$rootScope','$http', function($rootSco
         success(function (data, status, headers, config) {
             $rootScope.user = data;
         }).error(function (data, status, headers, config) {
-            $rootScope.user = {"id":"-1", "name":"Offline user", "role":"admin"}
+            $rootScope.user = {"id":"-1", "name":"Anónimo", "role":"admin"}
             console.log('could not get loggedIn user or user is offline');
         });
 }])
@@ -293,11 +293,32 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
         return unsyncedResources;
     }
 
-    $scope.syncResource = function(index) {
-        console.log("sync resource " + index);        //TODO(gb): Remove trace!!!
+    $scope.syncResource = function(e, index) {
+        // toggle loading state on button
+        var elem = angular.element(e.toElement);
+        $(elem).button('loading');
+
+        // get resource to be synced
         var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
         var resource = JSON.parse(unsyncedResources[index]);
-        console.log(resource);        //TODO(gb): Remove trace!!!
+        resource.active = true;
+
+        $http({method: 'GET', url: '/currentUser'}).
+            success(function (data, status, headers, config) {
+                $rootScope.user = data;
+                resource.user = data;
+
+                // sync the resource
+                $http({method: 'PUT', url: '/resources', data: resource}).
+                    success(function (data, status, headers, config) {
+                        // sync ok: reset button state, remove resource form localStorage
+                        $(elem).button('reset');
+                        var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+                        unsyncedResources.splice(index, 1);
+                        localStorage.setItem("unsyncedResources", JSON.stringify(unsyncedResources));
+                        $location.path('/lista')
+                    })
+            })
     }
 
     $scope.resetFilters = function(){
