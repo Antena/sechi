@@ -218,6 +218,16 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     $scope.comuna = $scope.comunas[0];
     $scope.settlements = settlementsBarrios;
 
+    // Offline?
+    $scope.offline = !navigator.onLine;
+    function online(event) {
+        $scope.offline = !navigator.onLine;
+        $scope.$apply();
+    }
+    window.addEventListener('online', online);
+    window.addEventListener('offline', online);
+
+
 
     //end of TODO
 
@@ -270,6 +280,24 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
             return filteredResources;
         }
         return [];
+    }
+
+    $scope.getUnsyncedResources = function() {
+        var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+        for (var i=0; i<unsyncedResources.length; i++) {
+            var resource = JSON.parse(unsyncedResources[i]);
+            resource.localStorageIndex = i;
+            unsyncedResources[i] = resource;
+        }
+
+        return unsyncedResources;
+    }
+
+    $scope.syncResource = function(index) {
+        console.log("sync resource " + index);        //TODO(gb): Remove trace!!!
+        var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+        var resource = JSON.parse(unsyncedResources[index]);
+        console.log(resource);        //TODO(gb): Remove trace!!!
     }
 
     $scope.resetFilters = function(){
@@ -564,8 +592,17 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                     $location.path('/lista')
                 }).
                 error(function (data, status, headers, config) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
+                    // offline post
+                    if (status == 0) {
+                        // load local storage and add new resource
+                        var resources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+                        $rootScope.resource.active = false;
+                        resources.push(JSON.stringify($rootScope.resource));
+
+                        // update local storage and redirect
+                        localStorage.setItem("unsyncedResources", JSON.stringify(resources));
+                        $location.path('/lista');
+                    }
                 });
         });
     }
