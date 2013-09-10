@@ -169,7 +169,6 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     }
 
     $scope.setResourceToDelete = function(id){
-        console.log(id);
         $scope.resourceToDeleteId = id;
     }
 
@@ -463,8 +462,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.getComuna = function(d){
-        console.log('comuna for:')
-        console.log(d);
         var comuna = Settlement.filter(function(r){
             return r.name==d;
         })[0];
@@ -638,7 +635,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 };
 
                 var comuna=$scope.getComuna($scope.resource.comuna);
-                console.log(comuna);
                 if(comuna && comuna.center){
                     $scope.zoomedComuna = comuna;
                     mapOptions.center= new google.maps.LatLng(comuna.center[1], comuna.center[0]);
@@ -683,9 +679,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             }, 1000)
         }
         $scope.mapLoaded = true;
-        console.log($scope.zoomedComuna);
         if($scope.zoomedComuna && $scope.resource.comuna!=$scope.zoomedComuna.name){
-            console.log("centering..");
             var comuna=$scope.getComuna($scope.resource.comuna);
             var center=new google.maps.LatLng(comuna.center[1], comuna.center[0]);
             $scope.map.setCenter(center);
