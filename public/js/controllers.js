@@ -38,26 +38,35 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
                 })
 
                 var content = '<p class="settlement">' + resource.settlement + '</p>';
-                content += "<p><strong>" + resource.name + "</strong></p>";
+                content += "<p class='no-margin-bottom'><strong>" + resource.name + "</strong></p>";
                 if(resource.address.street){
-                    content += "<p>";
+                    content += "<p class='no-margin-bottom'>";
                     content += resource.address.street;
                     content += resource.address.square ? " Manzana " + resource.address.square : "";
                     content += resource.address.houseNumber ? " Casa " + resource.address.houseNumber : "";
                     content += "</p>";
                 }
                 if(resource.openingHours){
-                    content += "<p>" + resource.openingHours + "</p>";
+                    content += "<p class='no-margin-bottom'>" + resource.openingHours + "</p>";
                 }
 
                 if(resource.telephone){
-                    content += "<p>" + resource.telephone + "</p>";
+                    content += "<p class='no-margin-bottom'>" + resource.telephone + "</p>";
                 }
 
-                if(resource.openingHours){
-                    content += "<p>" + resource.function + "</p>";
+                if(resource.function){
+                    content += "<p style='margin-top: 10px'>" + resource.function + "</p>";
                 }
 
+                if (resource.activities && resource.activities.length > 0) {
+                    content += "<p class='no-margin-bottom'>Actividades ofrecidas:</p>";
+                    content += "<ul>";
+                    for (var i=0; i<resource.activities.length; i++) {
+                        var activity = resource.activities[i];
+                        content += "<li>" + (activity.description ? activity.description : "Actividad sin descripción") + "</li>";
+                    }
+                    content += "</ul>";
+                }
 
                 if ($rootScope.user.id == resource.user.id || $rootScope.user.role == "admin") {
                     content += '<p><a href="/#/recurso/' + resource._id + '">Editar</a></p>'

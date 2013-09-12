@@ -63,3 +63,7 @@
     float: left;
     margin-right: 4px;
 }
+
+.no-margin-bottom {
+    margin-bottom: 0;
+}
