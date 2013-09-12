@@ -40,7 +40,11 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
                 var content = '<p class="settlement">' + resource.settlement + '</p>';
                 content += "<p><strong>" + resource.name + "</strong></p>";
                 if(resource.address.street){
-                    content += "<p>" + resource.address.street + "</p>";
+                    content += "<p>";
+                    content += resource.address.street;
+                    content += resource.address.square ? " Manzana " + resource.address.square : "";
+                    content += resource.address.houseNumber ? " Casa " + resource.address.houseNumber : "";
+                    content += "</p>";
                 }
                 if(resource.openingHours){
                     content += "<p>" + resource.openingHours + "</p>";
