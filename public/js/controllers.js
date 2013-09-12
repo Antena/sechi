@@ -87,7 +87,6 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
 
     $http({method: 'GET', url: '/assets/geoJson/UTIUs.geojson'}).
         success(function (data, status, headers, config) {
-            console.log(data);        //TODO(gb): Remove trace!!!
             $scope.utius = data.features.reverse();
             
             for (var i=0; i<data.features.length; i++) {
@@ -110,6 +109,26 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
                 $scope.addListenerToPolygon(polygons[i],data.features[i].properties);
             }
         });
+
+    $http.get('/assets/geoJson/villas.geojson').
+        success(function(data) {
+            for (var i=0; i<data.features.length; i++) {
+                var points = data.features[i].geometry.coordinates[0].map(function(p) {
+                    return  new google.maps.LatLng(p[1],p[0]);
+                });
+                var polygon = new google.maps.Polygon({
+                    paths : points,
+                    strokeColor : "#000",
+                    strokeOpacity : 0.5,
+                    strokeWeight : 0.5,
+                    fillOpacity : 0.5
+                });
+                polygon.center = points[0];
+                polygon.number = i;
+
+                polygon.setMap($scope.map);
+            }
+        })
 }])
 
 controllers.controller('ResourceListController', ['$scope', '$rootScope','$http','$location','$route','ActivityType','Settlement','$filter', function($scope, $rootScope,$http,$location,$route,ActivityType,Settlement,$filter) {
