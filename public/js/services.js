@@ -1,54 +1,54 @@
 var services = angular.module('sechi.services', []);
 
 services.factory('Settlement', function() {
-	return [
-			{
-				name : "Comuna 1 y 2",
-				center:[-58.3772703,-34.5842539],
-				barrios : [ 'Villa 31', 'Villa 31 Bis' ],
-			},
-			{
-				name : "Comuna 4",
-				center : [ -58.39825630187988, -34.65290913731696 ],
-				barrios : [ 'Villa 21-24', 'CH Espora', 'NHT Zabaleta', ]
-			},
-			{
-				name : "Comuna 8 norte",
-				center : [ -58.45293045043945, -34.66392283606156 ],
-				barrios : [ 'Barrio Piletones', 'Barrio Fátima', 'Calaza',
-						'Calacita', 'Barrio Carrillo', 'CH Soldati',
-						'CH Lacarra', 'CH Cruz y Lacarra', 'CH Portela',
-						'A. Los Pinos', 'A. La Esperanza', 'A. La Paloma',
-						'A. AU 7', ]
-			},
-			{
-				name : "Comuna 8 sur",
-				center : [ -58.473873138427734, -34.68919232823158 ],
-				barrios : [ 'Villa 20', 'Villa 16', 'CH Lugano I y II',
-						'CH Savio I y II', 'CH Parque de las Victorias' ]
-			},
-			{
-				name : "Comuna 8 y 9 oeste",
-				center : [ -58.49541664123535, -34.67084094948957 ],
-				barrios : [ 'Villa 15 (Ciudad Oculta)', 'CH Piedrabuena',
-						'CH Padre Mugica', 'CH M. Dorrego', 'NHT del Trabajo',
-						'Barrio Pirelli', 'Barrio INTA', 'A. Scapino',
-						'A. Bermejo', 'A. San Pablo', 'A. Barrio Obrero',
-						'A. María Auxiliadora', ]
-			},
-			{
-				name : "Comuna 8 y 9 este",
-				center : [ -58.47799301147461, -34.6638522400899 ],
-				barrios : [ 'Barrio Cildáñez', 'CH Nágera', 'CH Samoró',
-						'CH Castro', 'CH Copello' ]
-			},
-			{
-				name : "Comuna 7",
-				center : [ -58.43799591064453, -34.6510027716435 ],
-				barrios : [ 'Villa 1-11-14', 'Villa 13 Bis',
-						'CH Rivadavia I y II', 'CH Illia',
-						'Barrio Charrúa (Gral. San Martín)' ]
-			} ]
+    return [
+        {
+            name : "Comuna 1 y 2",
+            center:[-58.3772703,-34.5842539],
+            barrios : [ 'Villa 31', 'Villa 31 Bis' ]
+        },
+        {
+            name : "Comuna 4",
+            center : [ -58.39825630187988, -34.65290913731696 ],
+            barrios : [ 'Villa 21-24', 'CH Espora', 'NHT Zabaleta' ]
+        },
+        {
+            name : "Comuna 8 norte",
+            center : [ -58.45293045043945, -34.66392283606156 ],
+            barrios : [ 'Barrio Piletones', 'Barrio Fátima', 'Calaza',
+                'Calacita', 'Barrio Carrillo', 'CH Soldati',
+                'CH Lacarra', 'CH Cruz y Lacarra', 'CH Portela',
+                'A. Los Pinos', 'A. La Esperanza', 'A. La Paloma',
+                'A. AU 7', 'Barrio Riestra', 'Barrio 26 de junio' ]
+        },
+        {
+            name : "Comuna 8 sur",
+            center : [ -58.473873138427734, -34.68919232823158 ],
+            barrios : [ 'Villa 20', 'Villa 16', 'CH Lugano I y II',
+                'CH Savio I y II', 'CH Parque de las Victorias' ]
+        },
+        {
+            name : "Comuna 8 y 9 oeste",
+            center : [ -58.49541664123535, -34.67084094948957 ],
+            barrios : [ 'Villa 15 (Ciudad Oculta)', 'CH Piedrabuena',
+                'CH Padre Mugica', 'CH M. Dorrego (Los Perales)', 'NHT del Trabajo',
+                'Barrio Pirelli', 'Barrio INTA', 'A. Scapino',
+                'A. Bermejo', 'A. San Pablo', 'A. Barrio Obrero',
+                'A. María Auxiliadora' ]
+        },
+        {
+            name : "Comuna 8 y 9 este",
+            center : [ -58.47799301147461, -34.6638522400899 ],
+            barrios : [ 'Barrio Cildáñez', 'CH Nágera', 'CH Samoré',
+                'CH Castro', 'CH Copello' ]
+        },
+        {
+            name : "Comuna 7",
+            center : [ -58.43799591064453, -34.6510027716435 ],
+            barrios : [ 'Villa 1-11-14', 'Villa 13 Bis',
+                'CH Rivadavia I y II', 'CH Illia',
+                'Barrio Charrúa (Gral. San Martín)' ]
+        } ]
 })
 
 services.factory('OrganizationType', [function() {
