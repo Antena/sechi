@@ -67,6 +67,20 @@
             </tr>
             </thead>
             <tbody>
+            <tr ng-repeat="r in getUnsyncedResources()">
+                <td>{{ r.settlement }}</td>
+                <td>{{ r.name }}</td>
+                <td>{{ r.date | date:'dd/MM/yyyy' }}</td>
+                <td>{{r.user.name}}</td>
+                <td>No sincronizado</td>
+                <td>
+                    <button class="btn btn-success" ng-class="{disabled: offline}"
+                            data-loading-text="Sincronizando..."
+                            ng-click="syncResource($event, r.localStorageIndex)">
+                        Sincronizar
+                    </button>
+                </td>
+            </tr>
             <tr ng-repeat="r in getResources()">
                 <td>{{ r.settlement }}</td>
                 <td>{{ r.name }}</td>

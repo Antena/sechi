@@ -10,6 +10,12 @@
     height: 610px;
 }
 
+#map-offline {
+    width: 100%;
+    height: 610px;
+    background-color: #666;
+}
+
 .settlement {
     font-size: 11px;
     margin-bottom: 0px;

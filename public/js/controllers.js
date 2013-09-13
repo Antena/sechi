@@ -6,7 +6,8 @@ controllers.controller('AppController', ['$rootScope','$http', function($rootSco
         success(function (data, status, headers, config) {
             $rootScope.user = data;
         }).error(function (data, status, headers, config) {
-            console.log('could not get loggedIn user');
+            $rootScope.user = {"id":"-1", "name":"Anónimo", "role":"admin"}
+            console.log('could not get loggedIn user or user is offline');
         });
 
 }])
@@ -202,7 +203,6 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     }
 
     $scope.setResourceToDelete = function(id){
-        console.log(id);
         $scope.resourceToDeleteId = id;
     }
 
@@ -251,6 +251,14 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     $scope.comuna = $scope.comunas[0];
     $scope.settlements = settlementsBarrios;
 
+    // Offline?
+    $scope.offline = !navigator.onLine;
+    function online(event) {
+        $scope.offline = !navigator.onLine;
+        $scope.$apply();
+    }
+    window.addEventListener('online', online);
+    window.addEventListener('offline', online);
 
     //end of TODO
 
@@ -303,6 +311,45 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
             return filteredResources;
         }
         return [];
+    }
+
+    $scope.getUnsyncedResources = function() {
+        var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+        for (var i=0; i<unsyncedResources.length; i++) {
+            var resource = JSON.parse(unsyncedResources[i]);
+            resource.localStorageIndex = i;
+            unsyncedResources[i] = resource;
+        }
+
+        return unsyncedResources;
+    }
+
+    $scope.syncResource = function(e, index) {
+        // toggle loading state on button
+        var elem = angular.element(e.toElement);
+        $(elem).button('loading');
+
+        // get resource to be synced
+        var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+        var resource = JSON.parse(unsyncedResources[index]);
+        resource.active = true;
+
+        $http({method: 'GET', url: '/currentUser'}).
+            success(function (data, status, headers, config) {
+                $rootScope.user = data;
+                resource.user = data;
+
+                // sync the resource
+                $http({method: 'PUT', url: '/resources', data: resource}).
+                    success(function (data, status, headers, config) {
+                        // sync ok: reset button state, remove resource form localStorage
+                        $(elem).button('reset');
+                        var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+                        unsyncedResources.splice(index, 1);
+                        localStorage.setItem("unsyncedResources", JSON.stringify(unsyncedResources));
+                        $location.path('/lista')
+                    })
+            })
     }
 
     $scope.resetFilters = function(){
@@ -447,8 +494,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 
     $scope.getComuna = function(d){
-        console.log('comuna for:')
-        console.log(d);
         var comuna = Settlement.filter(function(r){
             return r.name==d;
         })[0];
@@ -597,8 +642,17 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                     $location.path('/lista')
                 }).
                 error(function (data, status, headers, config) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
+                    // offline post
+                    if (status == 0) {
+                        // load local storage and add new resource
+                        var resources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
+                        $rootScope.resource.active = false;
+                        resources.push(JSON.stringify($rootScope.resource));
+
+                        // update local storage and redirect
+                        localStorage.setItem("unsyncedResources", JSON.stringify(resources));
+                        $location.path('/lista');
+                    }
                 });
         });
     }
@@ -613,7 +667,6 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 };
 
                 var comuna=$scope.getComuna($scope.resource.comuna);
-                console.log(comuna);
                 if(comuna && comuna.center){
                     $scope.zoomedComuna = comuna;
                     mapOptions.center= new google.maps.LatLng(comuna.center[1], comuna.center[0]);
@@ -658,9 +711,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             }, 1000)
         }
         $scope.mapLoaded = true;
-        console.log($scope.zoomedComuna);
         if($scope.zoomedComuna && $scope.resource.comuna!=$scope.zoomedComuna.name){
-            console.log("centering..");
             var comuna=$scope.getComuna($scope.resource.comuna);
             var center=new google.maps.LatLng(comuna.center[1], comuna.center[0]);
             $scope.map.setCenter(center);
@@ -669,12 +720,13 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.initUsig = function(){
         var ac = new usig.AutoCompleter('inputAddress', {
-            rootUrl: 'http://servicios.usig.buenosaires.gob.ar/usig-js/2.4/',
+        	autoHideTimeout:10000,
+            rootUrl: 'http://servicios.usig.buenosaires.gob.ar/usig-js/3.0/',
             skin: 'usig4',
             onReady: function() {
 //       			$('#inputAddress').val('').removeAttr('disabled').focus();	        			
             },
-            afterSelection: function(option) {inputAddress
+            afterSelection: function(option) {
             },
 
             afterGeoCoding : function(pt) {
@@ -719,11 +771,12 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
         ac.addSuggester('Catastro', {
             inputPause : 200,
-            minTextLength : 1,
+            minTextLength : 3,
             showError : false
         });
     }
 
+    if (google) {
     $scope.geocoder = new google.maps.Geocoder();
     $scope.geocode = function() {
         var address = $rootScope.resource.address.street + " " + $rootScope.resource.address.number + " Ciudad De Buenos Aires, Buenos Aires Province, Argentina";
@@ -758,6 +811,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 alert('Geocode was not successful for the following reason: ' + status);
             }
         });
+    }
     }
 
     $scope.addMarker = function() {
