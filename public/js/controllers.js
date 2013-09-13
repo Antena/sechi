@@ -688,14 +688,14 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
     $scope.initUsig = function(){
         var ac = new usig.AutoCompleter('inputAddress', {
-            rootUrl: 'http://servicios.usig.buenosaires.gob.ar/usig-js/2.4/',
+        	autoHideTimeout:10000,
+            rootUrl: 'http://servicios.usig.buenosaires.gob.ar/usig-js/3.0/',
             skin: 'usig4',
             onReady: function() {
 //       			$('#inputAddress').val('').removeAttr('disabled').focus();	        			
             },
-            afterSelection: function(option) {inputAddress
+            afterSelection: function(option) {
             },
-
             afterGeoCoding : function(pt) {
                 if (pt instanceof usig.Punto) {
                     $.ajax({
@@ -738,8 +738,8 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
 
         ac.addSuggester('Catastro', {
             inputPause : 200,
-            minTextLength : 1,
-            showError : false
+            minTextLength : 3,
+            showError: false
         });
     }
 
