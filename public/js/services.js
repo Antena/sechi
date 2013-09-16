@@ -57,7 +57,7 @@ services.factory('OrganizationType', [function() {
             return {
                 State: [
                     { label: "Hospital" },
-                    { label: "Escuela" },
+                    { label: "Institución Educativa" },
                     { label: "CESAC" },
                     { label: "Policía" },
                     { label: "Portal Inclusivo SECHI" },
@@ -87,7 +87,8 @@ services.factory('OrganizationType', [function() {
                     { label: "Emprendimiento productivo" },
                     { label: "Centro Cultural" },
                     { label: "Juegoteca" },
-                    { label: "Hogar para niños y adolescentes" }
+                    { label: "Hogar para niños y adolescentes" },
+                    { label: "Institución Educativa" }
                 ],
                 NonStateOther: null
             }

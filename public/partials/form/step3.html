@@ -13,27 +13,31 @@
                         <input type="radio" name="optionsRadios" ng-model="resource.state" value="nonstate"/>
                         No estatal
                     </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="optionsRadios" ng-model="resource.state" value="hybrid"/>
+                        Gestión asociada
+                    </label>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-6">
-            <h4 ng-class="{ 'text-muted': !resource.isState() }">{{ 'Estatal' | uppercase }}</h4>
+            <h4 ng-class="{ 'text-muted': resource.state == 'nonstate' }">{{ 'Estatal' | uppercase }}</h4>
             <hr/>
             <div class="checkbox col-lg-6" ng-repeat="type in resource.organizationTypes.State" style="margin-top: -5px;">
-                <label ng-class="{ 'text-muted': !resource.isState() }">
-                    <input type="checkbox" value="" ng-model="type.checked" ng-disabled="!resource.isState()">
+                <label ng-class="{ 'text-muted': resource.state == 'nonstate' }">
+                    <input type="checkbox" value="" ng-model="type.checked" ng-disabled="resource.state == 'nonstate'">
                     {{ type.label }}
                 </label>
             </div>
             <div class="checkbox col-lg-1" style="margin-top: -5px;">
-                <label ng-class="{ 'text-muted': !resource.isState() }">
-                    <input type="checkbox" value="" ng-checked="resource.organizationTypes.StateOther"  ng-disabled="!resource.isState()">
+                <label ng-class="{ 'text-muted': resource.state == 'nonstate' }">
+                    <input type="checkbox" value="" ng-checked="resource.organizationTypes.StateOther"  ng-disabled="resource.state == 'nonstate'">
                     Otra
                 </label>
             </div>
             <div class="checkbox col-lg-5">
-                <input type="text" class="form-control input-inline" ng-model="resource.organizationTypes.StateOther" ng-disabled="!resource.isState()">
+                <input type="text" class="form-control input-inline" ng-model="resource.organizationTypes.StateOther" ng-disabled="resource.state == 'nonstate'">
             </div>
         </div>
         <div class="col-lg-6">
