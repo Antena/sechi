@@ -46,6 +46,16 @@
                 <span class="help-block" ng-show="form.inputFunction.$dirty && form.inputFunction.$error.required">Es necesario describir la función de la organización</span>
             </div>
         </div>
+        <br/>
+        <div class="form-group" style="margin-top: 15px">
+            <label for="inputExtraInfo" class="col-lg-12 control-label">Información suplementaria u observaciones</label>
+            <div class="col-lg-12">
+                <textarea class="form-control" rows="3"
+                          id="inputExtraInfo" name="inputExtraInfo"
+                          ng-model="resource.extraInfo">
+                </textarea>
+            </div>
+        </div>
     </fieldset>
 
     <!-- Modal -->
