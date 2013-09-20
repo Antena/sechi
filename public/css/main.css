@@ -73,3 +73,9 @@
 .no-margin-bottom {
     margin-bottom: 0;
 }
+
+input[required]:not(.nomark) {
+    background-image: url('/assets/images/asterisk.png');
+    background-position: 97% 50%;
+    background-repeat: no-repeat;
+}

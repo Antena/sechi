@@ -4,7 +4,7 @@
         <div class="form-group">
             <label for="inputName" class="col-lg-2 control-label">Nombre oficial *</label>
             <div class="col-lg-10" ng-class="{'has-error': form.inputName.$dirty && form.inputName.$invalid}">
-                <input type="text" class="form-control"
+                <input type="text" class="form-control nomark"
                        id="inputName" name="inputName" placeholder="Nombre oficial"
                        ng-model="resource.name" required>
                 <span class="help-block" ng-show="form.inputName.$dirty && form.inputName.$error.required">El nombre oficial es requerido</span>
@@ -40,7 +40,7 @@
         <div class="form-group">
             <label for="inputOpeningHours" class="col-lg-2 control-label">Horario de atención *</label>
             <div class="col-lg-10" ng-class="{'has-error': form.inputOpeningHours.$dirty && form.inputOpeningHours.$invalid}">
-                <input type="text" class="form-control"
+                <input type="text" class="form-control nomark"
                        id="inputOpeningHours" name="inputOpeningHours" placeholder="Horario de atención"
                        ng-model="resource.openingHours" required>
                 <span class="help-block" ng-show="form.inputOpeningHours.$dirty && form.inputOpeningHours.$error.required">El horario de atención es requerido</span>
