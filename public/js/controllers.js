@@ -145,7 +145,7 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
         })
 }])
 
-controllers.controller('ResourceListController', ['$scope', '$rootScope','$http','$location','$route','ActivityType','Settlement','$filter', function($scope, $rootScope,$http,$location,$route,ActivityType,Settlement,$filter) {
+controllers.controller('ResourceListController', ['$scope', '$rootScope','$http','$location','$route','ActivityType','Settlement','$filter','OrganizationType', function($scope, $rootScope,$http,$location,$route,ActivityType,Settlement,$filter,OrganizationType) {
 
 
     $scope.activity = {};
@@ -362,6 +362,64 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     }
 
     $scope.resetFilters();
+    
+    $scope.clear = function(){
+    	console.log($scope.currentStep);
+    	console.log($rootScope.resource);
+    	if($scope.currentStep==0){
+    		$scope.resource.interviewee=null;
+    		$scope.resource.interviewer=null;
+    		$scope.resource.acceptsTaC=false;
+    		$scope.resource.settlement=null;
+    		$scope.resource.comuna=null;
+    	}else if($scope.currentStep==1){
+    		$scope.resource.name=null;
+    		$scope.resource.fantasyName=null;
+    		$scope.resource.telephone=null;
+    		$scope.resource.otherTelephone=null;
+    		$scope.resource.email=null;
+    		$scope.resource.website=null;
+    		$scope.resource.openingHours=null;
+    		$scope.resource.contact=null;
+    	}else if($scope.currentStep==2){
+    		$scope.resource.address=null;
+    	}else if($scope.currentStep==3){
+    		$scope.resource.state=null;
+    		$scope.resource.organizationTypes.State.map(function(t){
+    			t.checked=false;
+    		});
+    		$scope.resource.organizationTypes.NonState.map(function(t){
+    			t.checked=false;
+    		});
+    		$scope.resource.organizationTypes.StateOther=null;
+    		$scope.resource.organizationTypes.NonStateOther=null;
+    	}else if($scope.currentStep==4){
+    		$scope.resource.extraInfo=null;
+    		$scope.resource.function=null;
+    	}else if($scope.currentStep==5){
+    		$scope.resource.legalPersonality=null;
+    		$scope.resource.legalPersonalityInProcess=null;
+    		$scope.resource.igj=null;
+    		$scope.resource.inaes=null;
+    		$scope.resource.resources.material=null;
+    		$scope.resource.resources.physical=null;
+    		$scope.resource.resources.human=null;
+    		$scope.resource.resources.funding=null;
+    	}
+//        $rootScope.resource = {
+//                user: $rootScope.user,
+//                active: true,
+//                address: { lat: null, lng: null },
+//                organizationType: 'state',
+//                organizationTypes: OrganizationType.load(),
+//                activities: [],
+//                state: 'state',
+//                isState: function() { return this.state == 'state' },
+//                legalPersonality: 'no',
+//                legalPersonalityInProcess: 'no',
+//                resources: { physical: { bathroom: 'no' } }
+//            };
+    }
 
 }])
 
@@ -977,6 +1035,8 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $rootScope.resource.activities[activityId] = $scope.activity;
         $scope.closeModal();
     }
+    
+    
 
 }])
 

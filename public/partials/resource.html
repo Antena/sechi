@@ -24,8 +24,10 @@
         <div ng-form="motherform">
             <ng-include src="step.template"></ng-include>
         </div>
+        <div class="pull-left">
+        	<button type="button" class="btn btn-default" ng-click="clear()" ng-show="true" data-loading-text="Finalizando...">Limpiar</button>
+        </div>
         <div class="pull-right">
-
             <button type="button" class="btn btn-success" ng-click="update($event, motherform.form)" ng-show="resource._id && !$last" data-loading-text="Guardando...">Guardar cambios</button>
             <button type="button" class="btn btn-default" ng-click="prev()" ng-show="!$first">Anterior</button>
             <button type="button" class="btn btn-primary" ng-click="next(motherform.form)" ng-hide="$last || $index == 4 && resource.isState()" ng-disabled="!$formunchanged && motherform.form.$invalid">Siguiente</button>
