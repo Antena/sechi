@@ -161,3 +161,9 @@ services.factory('ActivityType', [function() {
         }
     }
 }])
+
+services.factory('ActivityAges', [function() {
+	return {
+		ages:[{name:"A: 0-4",checked:false},{name:"B: 5-6",checked:false},{name:"C: 7-13",checked:false},{name:"D: 14-17",checked:false},{name:"E: Adultos",checked:false},{name:"F: Tercera Edad",checked:false},{name:"G: Todas las Edades",checked:false}]
+	}
+}])

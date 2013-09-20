@@ -45,3 +45,19 @@ filters.filter('roleName', [function(RoleName) {
         return "";
     }
 }])
+
+filters.filter('activityAges', [function() {
+    return function(ages) {
+    	if(ages){
+    		if( typeof ages === 'string' ) {
+                ages = [ {name:ages,checked:true} ];
+            }
+    		return ages.map(function(a){
+            	return a.name;
+            }).join(',');
+    	}
+        
+    	return null;
+        
+    }
+}])

@@ -2,7 +2,7 @@
     <fieldset>
         <legend>Indentificación de la organización (Paso {{ currentStep+1 }} de {{ stepslength() }})</legend>
         <div class="form-group">
-            <label for="inputName" class="col-lg-2 control-label">Nombre oficial</label>
+            <label for="inputName" class="col-lg-2 control-label">Nombre oficial *</label>
             <div class="col-lg-10" ng-class="{'has-error': form.inputName.$dirty && form.inputName.$invalid}">
                 <input type="text" class="form-control"
                        id="inputName" name="inputName" placeholder="Nombre oficial"
@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="inputOpeningHours" class="col-lg-2 control-label">Horario de atención</label>
+            <label for="inputOpeningHours" class="col-lg-2 control-label">Horario de atención *</label>
             <div class="col-lg-10" ng-class="{'has-error': form.inputOpeningHours.$dirty && form.inputOpeningHours.$invalid}">
                 <input type="text" class="form-control"
                        id="inputOpeningHours" name="inputOpeningHours" placeholder="Horario de atención"

@@ -841,10 +841,11 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
     }
 }])
 
-controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityType', function($scope, $rootScope, ActivityType) {
+controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityType','ActivityAges', function($scope, $rootScope, ActivityType, ActivityAges) {
     $scope.activityTypes = ActivityType;
     $scope.activity = {};
     $scope.editing = false;
+    
 
     $scope.topicChange = function() {
         $scope.selectedCode = null;
@@ -883,6 +884,10 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $scope.activity = {};
         $scope.selectedTopic = null;
         $scope.selectedType = null;
+        
+        $scope.ages=[];
+        $scope.ages=$.extend(true,[],ActivityAges.ages);
+        
         $('#activityModal').modal('show');
         $scope.editing = false;
     }
@@ -890,9 +895,32 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
     $scope.edit = function(activityId) {
         $scope.editing = true;
         $scope.activity = $rootScope.resource.activities[activityId];
+        
+        //transform to array if required
+        if( typeof $scope.activity.age === 'string' ) {
+            $scope.activity.age = [ {name:$scope.activity.age,checked:true} ];
+        }        
+        
+        $scope.ages=[];
+        $.extend(true,$scope.ages,ActivityAges.ages);
+        
+        if($scope.activity.age){
+	        $scope.ages.map(function(age){        
+	        	for(var i=0; i<$scope.activity.age.length; i++) {	
+	                if ($scope.activity.age[i].name == age.name){
+	                	age.checked=true;
+	                }
+	            }
+	        })
+        }
+        
+        
+        
         var type = $scope.activityTypes.types.filter(function(type) { return type.code == $scope.activity.code })[0]
-        $scope.selectedTopic = type.topic;
-        $scope.selectedType = type;
+        if(type){
+        	$scope.selectedTopic = type.topic;
+        	$scope.selectedType = type;
+        }
         $('#activityModal').modal('show');
     }
 
@@ -920,6 +948,9 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
             }
             return;
         }
+        $scope.activity.age=$scope.ages.filter(function(age){
+        	return age.checked==true;
+        });
 
         $scope.$formunchanged = true;
         $scope.activity.id = $rootScope.resource.activities.length;
@@ -937,6 +968,12 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
             }
             return;
         }
+        
+        $scope.activity.age=$scope.ages.filter(function(age){
+        	return age.checked==true;
+        });
+        
+        
         $rootScope.resource.activities[activityId] = $scope.activity;
         $scope.closeModal();
     }
