@@ -12,8 +12,11 @@ controllers.controller('AppController', ['$rootScope','$http', function($rootSco
 
 }])
 
-controllers.controller('MapController', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
+controllers.controller('MapController', ['$scope', '$rootScope', '$http','ActivityType', function($scope, $rootScope, $http, ActivityType) {
     $rootScope.page = 'map';
+    
+    $scope.activityTypes = ActivityType.types;
+    
 
     var mapOptions = {
         center: new google.maps.LatLng(-34.62, -58.441772),
@@ -60,11 +63,19 @@ controllers.controller('MapController', ['$scope', '$rootScope', '$http', functi
                 }
 
                 if (resource.activities && resource.activities.length > 0) {
+                	
                     content += "<p class='no-margin-bottom'>Actividades ofrecidas:</p>";
                     content += "<ul>";
                     for (var i=0; i<resource.activities.length; i++) {
                         var activity = resource.activities[i];
-                        content += "<li>" + (activity.description ? activity.description : "Actividad sin descripción") + "</li>";
+                        
+                        var actDefinition=$scope.activityTypes.filter(function(act){
+                        	return act.code==activity.code;
+                        })[0];
+                        if(actDefinition){
+                        	content += "<li>" + actDefinition.name + (activity.description ? ": " +activity.description : "") + "</li>";
+                        }
+                        
                     }
                     content += "</ul>";
                 }
@@ -207,7 +218,8 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     }
 
 
-    //TODO:refactor , actually copied these functions from activity controller, should reuse component
+    // TODO:refactor , actually copied these functions from activity controller,
+	// should reuse component
     $scope.typeChange = function(type) {
         $scope.activity.code = type.code;
     }
@@ -260,7 +272,7 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     window.addEventListener('online', online);
     window.addEventListener('offline', online);
 
-    //end of TODO
+    // end of TODO
 
     $scope.getResources = function(){
         var filteredTypes=[];
@@ -342,7 +354,8 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
                 // sync the resource
                 $http({method: 'PUT', url: '/resources', data: resource}).
                     success(function (data, status, headers, config) {
-                        // sync ok: reset button state, remove resource form localStorage
+                        // sync ok: reset button state, remove resource form
+						// localStorage
                         $(elem).button('reset');
                         var unsyncedResources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
                         unsyncedResources.splice(index, 1);
@@ -406,19 +419,19 @@ controllers.controller('ResourceListController', ['$scope', '$rootScope','$http'
     		$scope.resource.resources.human=null;
     		$scope.resource.resources.funding=null;
     	}
-//        $rootScope.resource = {
-//                user: $rootScope.user,
-//                active: true,
-//                address: { lat: null, lng: null },
-//                organizationType: 'state',
-//                organizationTypes: OrganizationType.load(),
-//                activities: [],
-//                state: 'state',
-//                isState: function() { return this.state == 'state' },
-//                legalPersonality: 'no',
-//                legalPersonalityInProcess: 'no',
-//                resources: { physical: { bathroom: 'no' } }
-//            };
+// $rootScope.resource = {
+// user: $rootScope.user,
+// active: true,
+// address: { lat: null, lng: null },
+// organizationType: 'state',
+// organizationTypes: OrganizationType.load(),
+// activities: [],
+// state: 'state',
+// isState: function() { return this.state == 'state' },
+// legalPersonality: 'no',
+// legalPersonalityInProcess: 'no',
+// resources: { physical: { bathroom: 'no' } }
+// };
     }
 
 }])
@@ -782,7 +795,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
             rootUrl: 'http://servicios.usig.buenosaires.gob.ar/usig-js/3.0/',
             skin: 'usig4',
             onReady: function() {
-//       			$('#inputAddress').val('').removeAttr('disabled').focus();	        			
+// $('#inputAddress').val('').removeAttr('disabled').focus();
             },
             afterSelection: function(option) {
             },
@@ -954,7 +967,7 @@ controllers.controller('ActivityController', ['$scope', '$rootScope', 'ActivityT
         $scope.editing = true;
         $scope.activity = $rootScope.resource.activities[activityId];
         
-        //transform to array if required
+        // transform to array if required
         if( typeof $scope.activity.age === 'string' ) {
             $scope.activity.age = [ {name:$scope.activity.age,checked:true} ];
         }        
