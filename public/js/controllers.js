@@ -1,10 +1,14 @@
 var controllers = angular.module('sechi.controllers', []);
 
-controllers.controller('AppController', ['$rootScope','$http', function($rootScope,$http) {
+controllers.controller('AppController', ['$rootScope','$http','$location','$window',function($rootScope,$http,$location,$window) {
     $rootScope.page = 'map';
     $http({method: 'GET', url: '/currentUser'}).
         success(function (data, status, headers, config) {
             $rootScope.user = data;
+            if(!data['id']){
+            	$rootScope.$apply( $location.path( "/login" ) );
+            	$window.location.href="/login";
+            }
         }).error(function (data, status, headers, config) {
             $rootScope.user = {"id":"-1", "name":"Anónimo", "role":"admin"}
             console.log('could not get loggedIn user or user is offline');
@@ -714,7 +718,7 @@ controllers.controller('ResourceDetailController', ['$scope', '$rootScope', 'Org
                 }).
                 error(function (data, status, headers, config) {
                     // offline post
-                    if (status == 0) {
+                    if (status == 0 || status == 403) {
                         // load local storage and add new resource
                         var resources = JSON.parse(localStorage.getItem("unsyncedResources")) || [];
                         $rootScope.resource.active = false;

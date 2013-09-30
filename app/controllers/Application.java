@@ -1,10 +1,9 @@
 package controllers;
 
-import java.security.MessageDigest;
+import models.User;
 
 import org.codehaus.jackson.node.ObjectNode;
 
-import models.User;
 import play.Logger;
 import play.data.Form;
 import play.libs.Json;
@@ -15,11 +14,14 @@ import views.html.index;
 public class Application extends Controller {
 
 	public static Result index() {
+		System.out.println("session email" + session("email"));
 		if (session("email") == null){
 			return ok(views.html.login.render(Form.form(Login.class)));
 		}
 
+		
 		String email = session("email");
+		System.out.println(email);
 		User user = User.findByEmail(email);
 		return ok(index.render("Your new application is ready.",user));
 	}
@@ -52,6 +54,7 @@ public class Application extends Controller {
 	
 	public static Result currentUser() {
 		String email = session().get("email");
+		
 		User findByEmail = User.findByEmail(email);
 		ObjectNode newObject = Json.newObject();
 		if (findByEmail != null) {
